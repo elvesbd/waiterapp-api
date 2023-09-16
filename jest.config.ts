@@ -11,7 +11,10 @@ const config: Config = {
   coverageDirectory: '../coverage',
   testEnvironment: 'node',
   moduleNameMapper: {
-    '@products/(.+)': '<rootDir>/modules/products/$1',
+    '@category/(.+)': '<rootDir>/modules/category/$1',
+    '@order/(.+)': '<rootDir>/modules/order/$1',
+    '@product/(.+)': '<rootDir>/modules/product/$1',
+    '@database/(.+)': '<rootDir>/modules/shared/database/$1',
   },
 };
 
