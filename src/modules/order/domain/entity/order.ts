@@ -1,6 +1,6 @@
 import { OrderStatus } from '@order/enum';
 import { OrderAlreadyFinalizedException } from '@order/exceptions';
-import { BaseEntity } from '@shared/database';
+import { BaseEntity } from '@shared/database/base';
 
 type ProductInput = {
   productId: string;

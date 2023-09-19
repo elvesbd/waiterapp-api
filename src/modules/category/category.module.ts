@@ -8,7 +8,7 @@ import {
   GetAllCategoriesUseCase,
 } from '@category/use-cases';
 import { TypeORMCategoryRepository } from '@shared/database/typeorm';
-import { SupaBaseUploadFileService } from '@shared/services/storage';
+import { SupaBaseFileStorageService } from '@shared/services/storage';
 import { SharedModule } from '@shared/shared.module';
 
 const categoryControllers = [
@@ -28,7 +28,7 @@ const categoryProviders = [CreateCategoryUseCase, GetAllCategoriesUseCase];
     },
     {
       provide: 'FileStorageService',
-      useClass: SupaBaseUploadFileService,
+      useClass: SupaBaseFileStorageService,
     },
   ],
 })

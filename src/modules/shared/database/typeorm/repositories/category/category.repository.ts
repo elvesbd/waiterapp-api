@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Category } from '@category/domain/entity/category';
 import { CategoryRepository } from '@category/infra';
-import { CategoryInputDto } from '@category/dto';
 
 @Injectable()
 export class TypeORMCategoryRepository implements CategoryRepository {
@@ -9,7 +8,7 @@ export class TypeORMCategoryRepository implements CategoryRepository {
     throw new Error('Method not implemented.');
   }
 
-  async create(input: CategoryInputDto): Promise<void> {
-    await console.log(input);
+  async save(category: Category): Promise<void> {
+    await console.log(category);
   }
 }
