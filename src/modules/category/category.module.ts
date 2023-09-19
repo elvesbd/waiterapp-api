@@ -7,6 +7,9 @@ import {
   CreateCategoryUseCase,
   GetAllCategoriesUseCase,
 } from '@category/use-cases';
+import { TypeORMCategoryRepository } from '@shared/database/typeorm';
+import { SupaBaseUploadFileService } from '@shared/services/storage';
+import { SharedModule } from '@shared/shared.module';
 
 const categoryControllers = [
   CreateCategoryController,
@@ -15,8 +18,18 @@ const categoryControllers = [
 const categoryProviders = [CreateCategoryUseCase, GetAllCategoriesUseCase];
 
 @Module({
-  imports: [],
+  imports: [SharedModule],
   controllers: [...categoryControllers],
-  providers: [...categoryProviders],
+  providers: [
+    ...categoryProviders,
+    {
+      provide: 'CategoryRepository',
+      useClass: TypeORMCategoryRepository,
+    },
+    {
+      provide: 'FileStorageService',
+      useClass: SupaBaseUploadFileService,
+    },
+  ],
 })
 export class CategoryModule {}
