@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { FileStorageService } from '@category/infra';
 import { OptimizeImageFileService } from '@shared/utils';
 import { SupaBaseClientService } from '@shared/services/storage';
-import { FileDto } from '@category/dto';
 import {
   GetUrlStorageException,
   UploadFileStorageException,
@@ -20,18 +19,17 @@ export class SupaBaseFileStorageService implements FileStorageService {
   private readonly logger = new Logger(SupaBaseClientService.name);
   private readonly SUPABASE_BUCKET = this.configService.get('SUPABASE_BUCKET');
 
-  async upload(file: FileDto): Promise<string> {
+  async upload(originalname: string, buffer: Buffer): Promise<string> {
     const supabase = await this.getSupaBaseClient();
-    const optimizedFileBuffer = await this.optimizeImageFileService.handler(
-      file.buffer,
-    );
+    const optimizedFileBuffer =
+      await this.optimizeImageFileService.handler(buffer);
 
     try {
       const {
         data: { path },
       } = await supabase.storage
         .from(this.SUPABASE_BUCKET)
-        .upload(file.originalname, optimizedFileBuffer, {
+        .upload(originalname, optimizedFileBuffer, {
           upsert: true,
         });
 
