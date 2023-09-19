@@ -1,4 +1,4 @@
-import { BaseEntity } from '@shared/database';
+import { BaseEntity } from '@shared/database/base';
 
 type Input = {
   name: string;

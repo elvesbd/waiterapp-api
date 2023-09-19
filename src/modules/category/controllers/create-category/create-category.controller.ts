@@ -1,12 +1,25 @@
-import { Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { ResponseDto, FileDto, RequestDto } from '@category/dto';
+import { CreateCategoryUseCase } from '@category/use-cases';
 import { CategoryApiPath } from '@category/controllers/constants';
-
+import { FileInterceptor } from '@nestjs/platform-express';
 @Controller(CategoryApiPath)
 export class CreateCategoryController {
-  constructor() {}
+  constructor(private readonly createCategoryUseCase: CreateCategoryUseCase) {}
 
   @Post()
-  async handle(): Promise<any> {
-    return 'CreateCategoryController';
+  @UseInterceptors(FileInterceptor('file'))
+  async handle(
+    @Body('name') name: string,
+    @UploadedFile() file: FileDto,
+  ): Promise<ResponseDto> {
+    const request: RequestDto = { name, file };
+    return await this.createCategoryUseCase.execute(request);
   }
 }
