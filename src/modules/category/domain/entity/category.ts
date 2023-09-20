@@ -1,6 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
+import { BaseEntity } from '@shared/database/typeorm/entities/base';
 
-export class Category {
+export class Category extends BaseEntity {
   public readonly id: string;
   public readonly name: string;
   public readonly imageUrl: string;
@@ -8,7 +8,7 @@ export class Category {
   public readonly updatedAt?: Date | null;
 
   constructor(name: string, imageUrl: string) {
-    this.id = uuidv4();
+    super();
     this.name = name;
     this.imageUrl = imageUrl;
     this.createdAt = new Date();
