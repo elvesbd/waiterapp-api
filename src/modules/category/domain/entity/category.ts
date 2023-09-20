@@ -1,13 +1,17 @@
-import { BaseEntity } from '@shared/database/base';
+import { v4 as uuidv4 } from 'uuid';
 
-export class Category extends BaseEntity {
+export class Category {
+  public readonly id: string;
   public readonly name: string;
   public readonly imageUrl: string;
+  public readonly createdAt: Date;
+  public readonly updatedAt?: Date | null;
 
   constructor(name: string, imageUrl: string) {
-    super();
+    this.id = uuidv4();
     this.name = this.formatName(name);
     this.imageUrl = imageUrl;
+    this.createdAt = new Date();
   }
 
   private formatName(name: string): string {

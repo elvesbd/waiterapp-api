@@ -1,4 +1,4 @@
-import { BaseEntity } from '@shared/database/base';
+import { v4 as uuidv4 } from 'uuid';
 
 type Input = {
   name: string;
@@ -9,13 +9,15 @@ type Input = {
   categoryId: string;
 };
 
-export class Product extends BaseEntity {
+export class Product {
+  public readonly id: string;
   public readonly name: string;
   public readonly description: string;
   public readonly price: number;
   public readonly imagePath: string;
   public readonly ingredients: string[];
   public readonly categoryId: string;
+  public readonly createdAt: Date;
 
   constructor({
     name,
@@ -25,12 +27,13 @@ export class Product extends BaseEntity {
     ingredients,
     categoryId,
   }: Input) {
-    super();
+    this.id = uuidv4();
     this.name = name;
     this.description = description;
     this.price = price;
     this.imagePath = imagePath;
     this.ingredients = ingredients;
     this.categoryId = categoryId;
+    this.createdAt = new Date();
   }
 }

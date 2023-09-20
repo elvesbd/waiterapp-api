@@ -7,5 +7,12 @@ export abstract class CategoryRepository {
     name,
     imageUrl,
     createdAt,
-  }: Category): Promise<void>;
+  }: CreateCategoryInput): Promise<Category>;
 }
+
+type CreateCategoryInput = {
+  id: string;
+  name: string;
+  imageUrl: string;
+  createdAt: Date;
+};
