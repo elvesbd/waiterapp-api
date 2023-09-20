@@ -23,7 +23,7 @@ export class TypeORMCategoryRepository implements CategoryRepository {
     return await this.repository.find();
   }
 
-  async save(category: Category): Promise<Category> {
-    return await this.repository.save(category);
+  async save(category: Category): Promise<void> {
+    await this.repository.save(category);
   }
 }
