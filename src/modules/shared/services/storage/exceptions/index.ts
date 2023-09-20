@@ -1,2 +1,1 @@
-export { GetUrlStorageException } from './get-url-storage.exception';
-export { UploadFileStorageException } from './upload-file-storage.exception';
+export { FileStorageException } from './file-storage.exception';

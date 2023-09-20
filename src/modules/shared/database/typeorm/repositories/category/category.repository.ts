@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { CategoryRepository } from '@category/infra';
+import { CategoryRepository } from '@category/infra/repository';
 import { Category } from '@category/domain/entity/category';
 import { TypeORMCategoryEntity, dataSource } from '@shared/database/typeorm';
 
@@ -11,9 +11,16 @@ export class TypeORMCategoryRepository implements CategoryRepository {
   constructor() {
     this.repository = dataSource.getRepository(TypeORMCategoryEntity);
   }
+  async getByName(name: string): Promise<Category> {
+    return await this.repository.findOne({
+      where: {
+        name,
+      },
+    });
+  }
 
   async getAll(): Promise<Category[] | []> {
-    throw new Error('Method not implemented.');
+    return await this.repository.find();
   }
 
   async save(category: Category): Promise<Category> {

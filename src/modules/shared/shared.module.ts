@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { OptimizeImageFileService } from '@shared/utils';
 import {
   TypeORMCategoryRepository,
   dataSource,
@@ -30,13 +29,11 @@ import { DatabaseService } from '@shared/database/services';
     TypeORMCategoryRepository,
     SupaBaseFileStorageService,
     SupaBaseClientService,
-    OptimizeImageFileService,
   ],
   exports: [
     TypeORMCategoryRepository,
     SupaBaseFileStorageService,
     SupaBaseClientService,
-    OptimizeImageFileService,
   ],
 })
 export class SharedModule {}

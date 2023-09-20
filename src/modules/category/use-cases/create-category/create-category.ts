@@ -1,8 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CategoryRepository, FileStorageService } from '@category/infra';
+import { CategoryRepository } from '@category/infra/repository';
 import { Category } from '@category/domain/entity/category';
 import { FileDto, OutputDto } from '@category/dto';
-import { CreateCategoryException } from '@category/exceptions';
+import { CategoryAlreadyExistsException } from '@category/exceptions';
+import { FileStorageService } from '@category/infra/storage';
+import { CapitalizeNameService } from '@shared/utils';
 
 @Injectable()
 export class CreateCategoryUseCase {
@@ -14,15 +16,27 @@ export class CreateCategoryUseCase {
   ) {}
 
   async execute(name: string, file: FileDto): Promise<OutputDto> {
-    try {
-      const { originalname, buffer } = file;
-      const path = await this.fileStorageService.upload(originalname, buffer);
-      const imageUrl = await this.fileStorageService.getUrl(path);
-      const category = new Category(name, imageUrl);
-      await this.categoryRepository.save(category);
-      return category;
-    } catch (error) {
-      throw new CreateCategoryException(name);
-    }
+    const formattedName = CapitalizeNameService.handler(name);
+
+    const existingCategory =
+      await this.categoryRepository.getByName(formattedName);
+    if (existingCategory)
+      throw new CategoryAlreadyExistsException(existingCategory.name);
+
+    const { originalname, buffer } = file;
+    const imageUrl = await this.uploadFile(originalname, buffer);
+
+    const category = new Category(formattedName, imageUrl);
+    await this.categoryRepository.save(category);
+    return category;
+  }
+
+  private async uploadFile(
+    originalname: string,
+    buffer: Buffer,
+  ): Promise<string> {
+    const path = await this.fileStorageService.upload(originalname, buffer);
+    const imageUrl = await this.fileStorageService.getUrl(path);
+    return imageUrl;
   }
 }

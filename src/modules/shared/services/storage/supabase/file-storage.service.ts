@@ -1,19 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { FileStorageService } from '@category/infra';
+import { FileStorageService } from '@category/infra/storage';
 import { OptimizeImageFileService } from '@shared/utils';
 import { SupaBaseClientService } from '@shared/services/storage';
-import {
-  GetUrlStorageException,
-  UploadFileStorageException,
-} from '@shared/services/storage/exceptions';
+import { FileStorageException } from '@shared/services/storage/exceptions';
 
 @Injectable()
 export class SupaBaseFileStorageService implements FileStorageService {
   constructor(
     private readonly configService: ConfigService,
     private readonly supaBaseClientService: SupaBaseClientService,
-    private readonly optimizeImageFileService: OptimizeImageFileService,
   ) {}
 
   private readonly logger = new Logger(SupaBaseClientService.name);
@@ -21,8 +17,7 @@ export class SupaBaseFileStorageService implements FileStorageService {
 
   async upload(originalname: string, buffer: Buffer): Promise<string> {
     const supabase = await this.getSupaBaseClient();
-    const optimizedFileBuffer =
-      await this.optimizeImageFileService.handler(buffer);
+    const optimizedFileBuffer = await OptimizeImageFileService.handler(buffer);
 
     try {
       const {
@@ -36,7 +31,7 @@ export class SupaBaseFileStorageService implements FileStorageService {
       return path;
     } catch (error) {
       this.logger.error(error.message);
-      throw new UploadFileStorageException(error.message);
+      throw new FileStorageException();
     }
   }
 
@@ -51,7 +46,7 @@ export class SupaBaseFileStorageService implements FileStorageService {
       return publicUrl;
     } catch (error) {
       this.logger.error(error.message);
-      throw new GetUrlStorageException(error.message);
+      throw new FileStorageException();
     }
   }
 

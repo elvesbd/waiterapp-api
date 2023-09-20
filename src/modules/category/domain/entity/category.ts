@@ -9,13 +9,8 @@ export class Category {
 
   constructor(name: string, imageUrl: string) {
     this.id = uuidv4();
-    this.name = this.formatName(name);
+    this.name = name;
     this.imageUrl = imageUrl;
     this.createdAt = new Date();
-  }
-
-  private formatName(name: string): string {
-    const [firstLetter, ...restOfName] = name.trim().toLowerCase();
-    return `${firstLetter.toUpperCase()}${restOfName.join('')}`;
   }
 }

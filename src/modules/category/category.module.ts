@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { SharedModule } from '@shared/shared.module';
+import { TypeORMCategoryRepository } from '@shared/database/typeorm';
+import { SupaBaseFileStorageService } from '@shared/services/storage';
 import {
   CreateCategoryController,
   GetAllCategoriesController,
@@ -7,9 +10,6 @@ import {
   CreateCategoryUseCase,
   GetAllCategoriesUseCase,
 } from '@category/use-cases';
-import { TypeORMCategoryRepository } from '@shared/database/typeorm';
-import { SupaBaseFileStorageService } from '@shared/services/storage';
-import { SharedModule } from '@shared/shared.module';
 
 const categoryControllers = [
   CreateCategoryController,

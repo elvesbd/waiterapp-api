@@ -1,1 +1,1 @@
-export { CreateCategoryException } from './create-category.exception';
+export { CategoryAlreadyExistsException } from './category-already-exists.exception';
