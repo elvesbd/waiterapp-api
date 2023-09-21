@@ -2,9 +2,9 @@ import { BaseEntity } from '@application/domain/entities/base';
 
 type Input = {
   name: string;
-  description: string;
+  description?: string;
   price: number;
-  imagePath: string;
+  imageUrl: string;
   ingredients?: string[];
   categoryId: string;
 };
@@ -12,9 +12,9 @@ type Input = {
 export class Product extends BaseEntity {
   public readonly id: string;
   public readonly name: string;
-  public readonly description: string;
+  public readonly description?: string;
   public readonly price: number;
-  public readonly imagePath: string;
+  public readonly imageUrl: string;
   public readonly ingredients?: string[];
   public readonly categoryId: string;
   public readonly createdAt: Date;
@@ -23,7 +23,7 @@ export class Product extends BaseEntity {
     name,
     description,
     price,
-    imagePath,
+    imageUrl,
     ingredients,
     categoryId,
   }: Input) {
@@ -31,7 +31,7 @@ export class Product extends BaseEntity {
     this.name = name;
     this.description = description;
     this.price = price;
-    this.imagePath = imagePath;
+    this.imageUrl = imageUrl;
     this.ingredients = ingredients;
     this.categoryId = categoryId;
     this.createdAt = new Date();

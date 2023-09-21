@@ -1,10 +1,7 @@
-import { FileDto } from '@api/DTOs/shared';
-
-export class RequestDto {
+export class CreateProductDto {
   name: string;
   description: string;
   price: number;
-  file: FileDto;
   ingredients?: string[];
   categoryId: string;
 }

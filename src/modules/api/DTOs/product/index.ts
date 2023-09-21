@@ -1,3 +1,3 @@
 export { OutputDto } from './output.dto';
-export { ResponseDto } from './response.dto';
-export { RequestDto } from './request.dto';
+export { ProductResponseDto } from './product-response.dto';
+export { CreateProductDto } from './create-product.dto';
