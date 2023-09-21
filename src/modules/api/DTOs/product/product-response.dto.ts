@@ -6,4 +6,6 @@ export class ProductResponseDto {
   imageUrl: string;
   ingredients?: string[];
   categoryId: string;
+  clientId: string;
+  createdAt: Date;
 }

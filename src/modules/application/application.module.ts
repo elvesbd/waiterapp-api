@@ -25,8 +25,13 @@ import {
   TypeORMProductRepository,
 } from 'modules/infra/database/typeorm';
 import { FileStorageService } from '@application/domain/storage';
+import { DeleteCategoryUseCase } from './usecases/category/delete-category';
 
-const categoryProviders = [CreateCategoryUseCase, GetAllCategoriesUseCase];
+const categoryProviders = [
+  CreateCategoryUseCase,
+  GetAllCategoriesUseCase,
+  DeleteCategoryUseCase,
+];
 const orderProviders = [
   CreateOrderUseCase,
   GetAllOrdersUseCase,

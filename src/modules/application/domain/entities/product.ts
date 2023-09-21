@@ -7,6 +7,7 @@ type Input = {
   imageUrl: string;
   ingredients?: string[];
   categoryId: string;
+  clientId: string;
 };
 
 export class Product extends BaseEntity {
@@ -17,6 +18,7 @@ export class Product extends BaseEntity {
   public readonly imageUrl: string;
   public readonly ingredients?: string[];
   public readonly categoryId: string;
+  public readonly clientId: string;
   public readonly createdAt: Date;
 
   constructor({
@@ -26,6 +28,7 @@ export class Product extends BaseEntity {
     imageUrl,
     ingredients,
     categoryId,
+    clientId,
   }: Input) {
     super();
     this.name = name;
@@ -34,6 +37,7 @@ export class Product extends BaseEntity {
     this.imageUrl = imageUrl;
     this.ingredients = ingredients;
     this.categoryId = categoryId;
+    this.clientId = clientId;
     this.createdAt = new Date();
   }
 }

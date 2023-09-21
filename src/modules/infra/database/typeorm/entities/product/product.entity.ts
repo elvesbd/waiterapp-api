@@ -31,6 +31,9 @@ export class TypeORMProductEntity {
   @Column({ type: 'uuid', nullable: false })
   categoryId: string;
 
+  @Column({ type: 'uuid', nullable: false })
+  clientId: string;
+
   @CreateDateColumn({ type: 'timestamp', nullable: false })
   createdAt: Date;
 

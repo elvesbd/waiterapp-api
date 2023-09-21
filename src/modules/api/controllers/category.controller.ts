@@ -1,7 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  Param,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -14,27 +17,46 @@ import {
 import { FileDto } from '@api/DTOs/shared';
 import { ResponseDto } from '@api/DTOs/category';
 import { CategoryApiPath } from './constants';
+import {
+  CategoryVMResponse,
+  CategoryViewModel,
+} from '@api/view-models/category-view-model';
+import { DeleteCategoryUseCase } from '@application/usecases/category/delete-category';
 
 @Controller(CategoryApiPath)
 export class CategoryController {
   constructor(
     private readonly createCategoryUseCase: CreateCategoryUseCase,
     private readonly getAllCategoriesUseCase: GetAllCategoriesUseCase,
+    private readonly deleteCategoryUseCase: DeleteCategoryUseCase,
   ) {}
-  //3ea703df-54f7-4721-b0f2-2ee48f8c7449
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
   async create(
     @Body('name') name: string,
     @UploadedFile() file: FileDto,
-  ): Promise<ResponseDto> {
-    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03ab';
-    return await this.createCategoryUseCase.execute(clientId, name, file);
+  ): Promise<CategoryVMResponse> {
+    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
+    const category = await this.createCategoryUseCase.execute(
+      clientId,
+      name,
+      file,
+    );
+    return CategoryViewModel.toHTTP(category);
   }
 
   @Get()
-  async find(): Promise<ResponseDto[] | []> {
-    return await this.getAllCategoriesUseCase.execute();
+  async getAll(): Promise<ResponseDto[] | []> {
+    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
+    const categories = await this.getAllCategoriesUseCase.execute(clientId);
+    return CategoryViewModel.toHTTPArray(categories);
+  }
+
+  @HttpCode(204)
+  @Delete(':id')
+  async remove(@Param('id') id: string): Promise<void> {
+    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
+    await this.deleteCategoryUseCase.execute(id, clientId);
   }
 }

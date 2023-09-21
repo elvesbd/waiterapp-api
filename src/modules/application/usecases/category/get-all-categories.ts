@@ -6,8 +6,8 @@ import { CategoryRepository } from '@application/domain/repositories';
 export class GetAllCategoriesUseCase {
   constructor(private readonly categoryRepository: CategoryRepository) {}
 
-  async execute(): Promise<OutputDto[] | []> {
-    const categories = await this.categoryRepository.getAll();
+  async execute(clientId: string): Promise<OutputDto[] | []> {
+    const categories = await this.categoryRepository.getAll(clientId);
     if (!categories.length) return [];
     return categories;
   }

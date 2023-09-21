@@ -1,4 +1,5 @@
 import { BaseEntity } from '@application/domain/entities/base';
+import { CapitalizeNameService } from '@infra/utils';
 
 export class Category extends BaseEntity {
   public readonly id: string;
@@ -9,7 +10,7 @@ export class Category extends BaseEntity {
 
   constructor(name: string, imageUrl: string, clientId: string) {
     super();
-    this.name = name;
+    this.name = CapitalizeNameService.handler(name);
     this.imageUrl = imageUrl;
     this.clientId = clientId;
     this.createdAt = new Date();

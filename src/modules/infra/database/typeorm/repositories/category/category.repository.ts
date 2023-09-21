@@ -11,19 +11,20 @@ export class TypeORMCategoryRepository implements CategoryRepository {
   constructor() {
     this.repository = dataSource.getRepository(TypeORMCategoryEntity);
   }
-  async getByName(name: string): Promise<Category> {
-    return await this.repository.findOne({
-      where: {
-        name,
-      },
-    });
-  }
-
-  async getAll(): Promise<Category[] | []> {
-    return await this.repository.find();
-  }
 
   async save(category: Category): Promise<void> {
     await this.repository.save(category);
+  }
+
+  async delete(id: string, clientId: string): Promise<void> {
+    await this.repository.delete({ id, clientId });
+  }
+
+  async getAll(clientId: string): Promise<Category[] | []> {
+    return await this.repository.find({
+      where: {
+        clientId,
+      },
+    });
   }
 }

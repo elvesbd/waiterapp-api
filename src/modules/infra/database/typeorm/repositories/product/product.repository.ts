@@ -12,8 +12,12 @@ export class TypeORMProductRepository implements ProductRepository {
     this.repository = dataSource.getRepository(TypeORMProductEntity);
   }
 
-  async getAll(): Promise<Product[] | []> {
-    return await this.repository.find();
+  async getAll(clientId: string): Promise<Product[] | []> {
+    return await this.repository.find({
+      where: {
+        clientId,
+      },
+    });
   }
 
   async save(category: Product): Promise<void> {

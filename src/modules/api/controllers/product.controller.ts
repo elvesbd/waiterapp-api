@@ -3,17 +3,22 @@ import {
   Controller,
   Delete,
   Get,
-  HttpStatus,
   Post,
   UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   CreateProductUseCase,
   GetAllProductsUseCase,
 } from '@application/usecases/product';
-import { FileDto, ApiResponse } from '@api/DTOs/shared';
-import { CreateProductDto, ProductResponseDto } from '@api/DTOs/product';
+import { FileDto } from '@api/DTOs/shared';
+import { CreateProductDto } from '@api/DTOs/product';
 import { ProductApiPath } from './constants';
+import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ProductVMResponse,
+  ProductViewModel,
+} from '@api/view-models/product-view-model';
 
 @Controller(ProductApiPath)
 export class ProductController {
@@ -23,37 +28,25 @@ export class ProductController {
   ) {}
 
   @Post()
+  @UseInterceptors(FileInterceptor('file'))
   async create(
     @Body() createProductDto: CreateProductDto,
     @UploadedFile() file: FileDto,
-  ): Promise<ApiResponse<ProductResponseDto>> {
-    try {
-      const product = await this.createProductUseCase.execute(
-        createProductDto,
-        file,
-      );
-      return new ApiResponse(product, HttpStatus.CREATED, 'Sucesso');
-    } catch (error) {
-      return new ApiResponse(
-        undefined,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        error.message,
-      );
-    }
+  ): Promise<ProductVMResponse> {
+    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03ab';
+    const product = await this.createProductUseCase.execute(
+      clientId,
+      createProductDto,
+      file,
+    );
+    return ProductViewModel.toHTTP(product);
   }
 
   @Get()
-  async getAll(): Promise<ApiResponse<ProductResponseDto[]> | []> {
-    try {
-      const products = await this.getAllProductsUseCase.execute();
-      return new ApiResponse(products, HttpStatus.CREATED, 'Sucesso');
-    } catch (error) {
-      return new ApiResponse(
-        undefined,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        error.message,
-      );
-    }
+  async getAll(): Promise<ProductVMResponse[]> {
+    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
+    const products = await this.getAllProductsUseCase.execute(clientId);
+    return ProductViewModel.toHTTPArray(products);
   }
 
   @Get('category/:categoryId')

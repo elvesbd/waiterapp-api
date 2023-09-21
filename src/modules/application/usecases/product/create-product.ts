@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductDto, ProductResponseDto } from '@api/DTOs/product';
+import { CreateProductDto, OutputDto } from '@api/DTOs/product';
 import { FileDto } from '@api/DTOs/shared';
 import { ProductRepository } from '@application/domain/repositories';
 import { FileStorageService } from '@application/domain/storage';
@@ -13,9 +13,10 @@ export class CreateProductUseCase {
   ) {}
 
   async execute(
+    clientId: string,
     input: CreateProductDto,
     file: FileDto,
-  ): Promise<ProductResponseDto> {
+  ): Promise<OutputDto> {
     const path = await this.fileStorageService.upload({
       originalname: input.name,
       buffer: file.buffer,
@@ -30,6 +31,7 @@ export class CreateProductUseCase {
       price: input.price,
       ingredients: input.ingredients,
       categoryId: input.categoryId,
+      clientId,
       imageUrl,
     });
     await this.categoryRepository.save(product);

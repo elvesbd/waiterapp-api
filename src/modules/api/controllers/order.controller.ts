@@ -11,7 +11,7 @@ export class OrderController {
   }
 
   @Get()
-  async handle(): Promise<any> {
+  async getAll(): Promise<any> {
     return 'GetAllOrdersController';
   }
 
