@@ -18,10 +18,9 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@category/*": ["./modules/category/*"],
-      "@order/*": ["./modules/order/*"],
-      "@product/*": ["./modules/product/*"],
-      "@shared/*": ["./modules/shared/*"]
+      "@api/*": ["./modules/api/*"],
+      "@application/*": ["./modules/application/*"],
+      "@infra/*": ["./modules/infra/*"]
     },
     "rootDirs": ["./", "../tests/"]
   }

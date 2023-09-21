@@ -1,3 +1,9 @@
 {
-  "cSpell.words": ["originalname", "supabase", "SUPABASE", "typeorm"]
+  "cSpell.words": [
+    "originalname",
+    "supabase",
+    "SUPABASE",
+    "typeorm",
+    "usecases"
+  ]
 }
