@@ -3,16 +3,15 @@ import { CategoryRepository } from '@category/infra/repository';
 import { Category } from '@category/domain/entity/category';
 import { FileDto, OutputDto } from '@category/dto';
 import { CategoryAlreadyExistsException } from '@category/exceptions';
-import { FileStorageService } from '@category/infra/storage';
 import { CapitalizeNameService } from '@shared/utils';
+import { CategoryFileStorageService } from '@category/infra/storage';
 
 @Injectable()
 export class CreateCategoryUseCase {
   constructor(
     @Inject('CategoryRepository')
     private readonly categoryRepository: CategoryRepository,
-    @Inject('FileStorageService')
-    private readonly fileStorageService: FileStorageService,
+    private readonly categoryFileStorageService: CategoryFileStorageService,
   ) {}
 
   async execute(name: string, file: FileDto): Promise<OutputDto> {
@@ -24,19 +23,16 @@ export class CreateCategoryUseCase {
       throw new CategoryAlreadyExistsException(existingCategory.name);
 
     const { originalname, buffer } = file;
-    const imageUrl = await this.uploadFile(originalname, buffer);
+    const path = await this.categoryFileStorageService.upload({
+      originalname,
+      buffer,
+      width: 20,
+      height: 20,
+    });
+    const imageUrl = await this.categoryFileStorageService.getUrl(path);
 
     const category = new Category(formattedName, imageUrl);
     await this.categoryRepository.save(category);
     return category;
-  }
-
-  private async uploadFile(
-    originalname: string,
-    buffer: Buffer,
-  ): Promise<string> {
-    const path = await this.fileStorageService.upload(originalname, buffer);
-    const imageUrl = await this.fileStorageService.getUrl(path);
-    return imageUrl;
   }
 }

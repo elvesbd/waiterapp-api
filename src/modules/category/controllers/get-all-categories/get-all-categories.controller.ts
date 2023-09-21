@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { OutputDto } from '@category/dto';
+import { ResponseDto } from '@category/dto';
 import { GetAllCategoriesUseCase } from '@category/use-cases';
 import { CategoryApiPath } from '@category/controllers/constants';
 
@@ -10,7 +10,7 @@ export class GetAllCategoriesController {
   ) {}
 
   @Get()
-  async handle(): Promise<OutputDto[] | []> {
+  async handle(): Promise<ResponseDto[] | []> {
     return await this.findCategoriesUseCase.execute();
   }
 }

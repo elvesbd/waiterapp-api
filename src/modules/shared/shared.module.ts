@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import {
   TypeORMCategoryRepository,
+  TypeORMProductRepository,
   dataSource,
 } from '@shared/database/typeorm';
 import {
@@ -27,11 +28,13 @@ import { DatabaseService } from '@shared/database/services';
   ],
   providers: [
     TypeORMCategoryRepository,
+    TypeORMProductRepository,
     SupaBaseFileStorageService,
     SupaBaseClientService,
   ],
   exports: [
     TypeORMCategoryRepository,
+    TypeORMProductRepository,
     SupaBaseFileStorageService,
     SupaBaseClientService,
   ],

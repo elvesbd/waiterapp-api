@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common';
+import { FileDto, RequestDto } from '@product/dto';
+import { ProductRepository } from '@product/infra/repository';
+import { ProductFileStorageService } from '@product/infra/storage';
 
 @Injectable()
 export class CreateProductUseCase {
-  constructor() {}
+  constructor(
+    private readonly categoryRepository: ProductRepository,
+    private readonly productFileStorageService: ProductFileStorageService,
+  ) {}
 
-  async execute(): Promise<any> {
-    return null;
+  async execute(input: RequestDto, file: FileDto): Promise<any> {
+    return { input, file };
   }
 }

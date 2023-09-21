@@ -1,21 +1,21 @@
-import { v4 as uuidv4 } from 'uuid';
+import { BaseEntity } from '@shared/database/typeorm/entities/base';
 
 type Input = {
   name: string;
   description: string;
   price: number;
   imagePath: string;
-  ingredients: string[];
+  ingredients?: string[];
   categoryId: string;
 };
 
-export class Product {
+export class Product extends BaseEntity {
   public readonly id: string;
   public readonly name: string;
   public readonly description: string;
   public readonly price: number;
   public readonly imagePath: string;
-  public readonly ingredients: string[];
+  public readonly ingredients?: string[];
   public readonly categoryId: string;
   public readonly createdAt: Date;
 
@@ -27,7 +27,7 @@ export class Product {
     ingredients,
     categoryId,
   }: Input) {
-    this.id = uuidv4();
+    super();
     this.name = name;
     this.description = description;
     this.price = price;

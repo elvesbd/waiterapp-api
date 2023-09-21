@@ -1,12 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { FileStorageService } from '@category/infra/storage';
 import { OptimizeImageFileService } from '@shared/utils';
 import { SupaBaseClientService } from '@shared/services/storage';
 import { FileStorageException } from '@shared/services/storage/exceptions';
+import { UploadCategoryFile } from '@category/infra/storage';
 
 @Injectable()
-export class SupaBaseFileStorageService implements FileStorageService {
+export class SupaBaseFileStorageService {
   constructor(
     private readonly configService: ConfigService,
     private readonly supaBaseClientService: SupaBaseClientService,
@@ -15,9 +15,14 @@ export class SupaBaseFileStorageService implements FileStorageService {
   private readonly logger = new Logger(SupaBaseClientService.name);
   private readonly SUPABASE_BUCKET = this.configService.get('SUPABASE_BUCKET');
 
-  async upload(originalname: string, buffer: Buffer): Promise<string> {
+  async upload(input: UploadCategoryFile): Promise<string> {
+    const { originalname, buffer, width, height } = input;
     const supabase = await this.getSupaBaseClient();
-    const optimizedFileBuffer = await OptimizeImageFileService.handler(buffer);
+    const optimizedFileBuffer = await OptimizeImageFileService.handler(
+      buffer,
+      width,
+      height,
+    );
 
     try {
       const {
