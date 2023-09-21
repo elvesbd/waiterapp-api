@@ -14,7 +14,11 @@ export class CreateCategoryUseCase {
     private readonly fileStorageService: FileStorageService,
   ) {}
 
-  async execute(name: string, file: FileDto): Promise<OutputDto> {
+  async execute(
+    clientId: string,
+    name: string,
+    file: FileDto,
+  ): Promise<OutputDto> {
     const formattedName = CapitalizeNameService.handler(name);
 
     const existingCategory =
@@ -31,7 +35,7 @@ export class CreateCategoryUseCase {
     });
     const imageUrl = await this.fileStorageService.getUrl(path);
 
-    const category = new Category(formattedName, imageUrl);
+    const category = new Category(formattedName, imageUrl, clientId);
     await this.categoryRepository.save(category);
     return category;
   }

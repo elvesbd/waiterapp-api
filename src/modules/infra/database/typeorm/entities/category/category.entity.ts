@@ -18,6 +18,9 @@ export class TypeORMCategoryEntity {
   @Column({ type: 'varchar', length: 255, nullable: false })
   imageUrl: string;
 
+  @Column({ type: 'uuid', nullable: false })
+  clientId: string;
+
   @CreateDateColumn({ type: 'timestamp', nullable: false })
   createdAt: Date;
 

@@ -21,6 +21,7 @@ export class CategoryController {
     private readonly createCategoryUseCase: CreateCategoryUseCase,
     private readonly getAllCategoriesUseCase: GetAllCategoriesUseCase,
   ) {}
+  //3ea703df-54f7-4721-b0f2-2ee48f8c7449
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
@@ -28,7 +29,8 @@ export class CategoryController {
     @Body('name') name: string,
     @UploadedFile() file: FileDto,
   ): Promise<ResponseDto> {
-    return await this.createCategoryUseCase.execute(name, file);
+    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03ab';
+    return await this.createCategoryUseCase.execute(clientId, name, file);
   }
 
   @Get()
