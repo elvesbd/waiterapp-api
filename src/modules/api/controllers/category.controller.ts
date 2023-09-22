@@ -73,8 +73,7 @@ export class CategoryController {
     @Body() updateRequestDto: UpdateRequestDto,
   ): Promise<void> {
     const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
-    await this.updateCategoryUseCase.execute({
-      id,
+    await this.updateCategoryUseCase.execute(id, {
       clientId,
       ...updateRequestDto,
     });

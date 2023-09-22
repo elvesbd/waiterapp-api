@@ -7,18 +7,15 @@ import { CategoryNotFoundException } from '@application/exceptions/category';
 export class UpdateCategoryUseCase {
   constructor(private readonly categoryRepository: CategoryRepository) {}
 
-  async execute(input: Input): Promise<void> {
-    const category = await this.categoryRepository.getOne(
-      input.id,
-      input.clientId,
-    );
-    if (!category) throw new CategoryNotFoundException(input.name);
+  async execute(id: string, input: Input): Promise<void> {
+    const category = await this.categoryRepository.getOne(id, input.clientId);
+    if (!category) throw new CategoryNotFoundException();
 
     const updatedCategory = {
       ...category,
       ...input,
     };
 
-    return await this.categoryRepository.update(updatedCategory);
+    return await this.categoryRepository.update(id, updatedCategory);
   }
 }

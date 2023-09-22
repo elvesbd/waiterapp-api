@@ -3,6 +3,9 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  Param,
+  Patch,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -10,21 +13,25 @@ import {
 import {
   CreateProductUseCase,
   GetAllProductsUseCase,
+  UpdateProductUseCase,
+  DeleteProductUseCase,
 } from '@application/usecases/product';
-import { FileDto } from '@api/DTOs/shared';
-import { CreateProductDto } from '@api/DTOs/product';
-import { ProductApiPath } from './constants';
-import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ProductVMResponse,
   ProductViewModel,
 } from '@api/view-models/product-view-model';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FileDto } from '@api/DTOs/shared';
+import { CreateProductDto, UpdateRequestDto } from '@api/DTOs/product';
+import { ProductApiPath } from './constants';
 
 @Controller(ProductApiPath)
 export class ProductController {
   constructor(
     private readonly createProductUseCase: CreateProductUseCase,
     private readonly getAllProductsUseCase: GetAllProductsUseCase,
+    private readonly deleteProductUseCase: DeleteProductUseCase,
+    private readonly updateProductUseCase: UpdateProductUseCase,
   ) {}
 
   @Post()
@@ -49,8 +56,26 @@ export class ProductController {
     return ProductViewModel.toHTTPArray(products);
   }
 
-  @Delete(':productId')
-  async remove(): Promise<any> {
-    return 'DeleteProductController';
+  @HttpCode(204)
+  @Patch(':id')
+  @UseInterceptors(FileInterceptor('file'))
+  async update(
+    @Param('id') id: string,
+    @Body() updateRequestDto: UpdateRequestDto,
+    @UploadedFile() file?: FileDto,
+  ): Promise<void> {
+    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
+    await this.updateProductUseCase.execute(id, {
+      clientId,
+      ...updateRequestDto,
+      ...file,
+    });
+  }
+
+  @HttpCode(204)
+  @Delete(':id')
+  async remove(@Param('id') id: string): Promise<void> {
+    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
+    await this.deleteProductUseCase.execute(id, clientId);
   }
 }

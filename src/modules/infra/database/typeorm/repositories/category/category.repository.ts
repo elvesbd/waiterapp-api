@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { Category } from '@application/domain/entities';
 import { CategoryRepository } from '@application/domain/repositories';
 import { TypeORMCategoryEntity, dataSource } from '@infra/database/typeorm';
+import { Input } from '@application/usecases/types/category';
 
 @Injectable()
 export class TypeORMCategoryRepository implements CategoryRepository {
@@ -16,8 +17,8 @@ export class TypeORMCategoryRepository implements CategoryRepository {
     await this.repository.save(category);
   }
 
-  public async update(input: Category): Promise<void> {
-    await this.repository.save(input);
+  public async update(id: string, input: Input): Promise<void> {
+    await this.repository.update(id, input);
   }
 
   async getOne(id: string, clientId: string): Promise<Category> {
@@ -49,7 +50,7 @@ export class TypeORMCategoryRepository implements CategoryRepository {
     });
   }
 
-  async delete(id: string, clientId: string): Promise<void> {
-    await this.repository.delete({ id, clientId });
+  async delete(id: string): Promise<void> {
+    await this.repository.delete({ id });
   }
 }

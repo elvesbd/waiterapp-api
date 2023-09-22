@@ -1,8 +1,8 @@
 import { NotFoundException } from '@nestjs/common';
 
-export class CategoryNotFoundException extends NotFoundException {
+export class ProductNotFoundException extends NotFoundException {
   constructor() {
-    super(`Categoria não encontrada!`);
+    super(`Produto não encontrado!`);
     this.name = 'CategoryNotFoundException';
   }
 }

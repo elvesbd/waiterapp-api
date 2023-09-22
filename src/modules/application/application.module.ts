@@ -4,18 +4,20 @@ import { SupaBaseFileStorageService } from '@infra/services/storage';
 import {
   CreateCategoryUseCase,
   GetAllCategoriesUseCase,
-  UpdateCategoryUseCase,
   GetAllProductsByCategoryUseCase,
+  UpdateCategoryUseCase,
+  DeleteCategoryUseCase,
 } from '@application/usecases/category';
 import {
-  ChangeOrderStatusUseCase,
   CreateOrderUseCase,
   GetAllOrdersUseCase,
+  ChangeOrderStatusUseCase,
 } from '@application/usecases/order';
 import {
   CreateProductUseCase,
-  DeleteProductUseCase,
   GetAllProductsUseCase,
+  UpdateProductUseCase,
+  DeleteProductUseCase,
 } from '@application/usecases/product';
 import {
   CategoryRepository,
@@ -26,14 +28,13 @@ import {
   TypeORMProductRepository,
 } from 'modules/infra/database/typeorm';
 import { FileStorageService } from '@application/domain/storage';
-import { DeleteCategoryUseCase } from './usecases/category/delete-category';
 
 const categoryProviders = [
   CreateCategoryUseCase,
   GetAllCategoriesUseCase,
-  DeleteCategoryUseCase,
-  UpdateCategoryUseCase,
   GetAllProductsByCategoryUseCase,
+  UpdateCategoryUseCase,
+  DeleteCategoryUseCase,
 ];
 const orderProviders = [
   CreateOrderUseCase,
@@ -43,6 +44,7 @@ const orderProviders = [
 const productProviders = [
   CreateProductUseCase,
   GetAllProductsUseCase,
+  UpdateProductUseCase,
   DeleteProductUseCase,
 ];
 
