@@ -4,6 +4,7 @@ import { SupaBaseFileStorageService } from '@infra/services/storage';
 import {
   CreateCategoryUseCase,
   GetAllCategoriesUseCase,
+  GetAllProductsByCategoryUseCase,
 } from '@application/usecases/category';
 import {
   ChangeOrderStatusUseCase,
@@ -13,7 +14,6 @@ import {
 import {
   CreateProductUseCase,
   DeleteProductUseCase,
-  GetAllProductsByCategoryUseCase,
   GetAllProductsUseCase,
 } from '@application/usecases/product';
 import {
@@ -31,6 +31,7 @@ const categoryProviders = [
   CreateCategoryUseCase,
   GetAllCategoriesUseCase,
   DeleteCategoryUseCase,
+  GetAllProductsByCategoryUseCase,
 ];
 const orderProviders = [
   CreateOrderUseCase,
@@ -40,7 +41,6 @@ const orderProviders = [
 const productProviders = [
   CreateProductUseCase,
   GetAllProductsUseCase,
-  GetAllProductsByCategoryUseCase,
   DeleteProductUseCase,
 ];
 

@@ -5,6 +5,7 @@ import {
   Get,
   HttpCode,
   Param,
+  Patch,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -12,16 +13,18 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   CreateCategoryUseCase,
+  DeleteCategoryUseCase,
   GetAllCategoriesUseCase,
+  GetAllProductsByCategoryUseCase,
+  UpdateCategoryUseCase,
 } from '@application/usecases/category';
 import { FileDto } from '@api/DTOs/shared';
-import { ResponseDto } from '@api/DTOs/category';
+import { ResponseDto, UpdateRequestDto } from '@api/DTOs/category';
 import { CategoryApiPath } from './constants';
 import {
   CategoryVMResponse,
   CategoryViewModel,
 } from '@api/view-models/category-view-model';
-import { DeleteCategoryUseCase } from '@application/usecases/category/delete-category';
 
 @Controller(CategoryApiPath)
 export class CategoryController {
@@ -29,6 +32,8 @@ export class CategoryController {
     private readonly createCategoryUseCase: CreateCategoryUseCase,
     private readonly getAllCategoriesUseCase: GetAllCategoriesUseCase,
     private readonly deleteCategoryUseCase: DeleteCategoryUseCase,
+    private readonly updateCategoryUseCase: UpdateCategoryUseCase,
+    private readonly getAllProductsByCategoryUseCase: GetAllProductsByCategoryUseCase,
   ) {}
 
   @Post()
@@ -51,6 +56,26 @@ export class CategoryController {
     const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
     const categories = await this.getAllCategoriesUseCase.execute(clientId);
     return CategoryViewModel.toHTTPArray(categories);
+  }
+
+  @Get(':id/products')
+  async getByCategory(@Param('id') id: string): Promise<any> {
+    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03ab';
+    return await this.getAllProductsByCategoryUseCase.execute(clientId, id);
+  }
+
+  @HttpCode(204)
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() updateRequestDto: UpdateRequestDto,
+  ): Promise<void> {
+    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
+    await this.updateCategoryUseCase.execute({
+      id,
+      clientId,
+      ...updateRequestDto,
+    });
   }
 
   @HttpCode(204)

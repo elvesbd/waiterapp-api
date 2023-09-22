@@ -16,8 +16,17 @@ export class TypeORMCategoryRepository implements CategoryRepository {
     await this.repository.save(category);
   }
 
-  async delete(id: string, clientId: string): Promise<void> {
-    await this.repository.delete({ id, clientId });
+  public async update(input: Category): Promise<void> {
+    await this.repository.save(input);
+  }
+
+  async getOne(id: string, clientId: string): Promise<Category> {
+    return await this.repository.findOne({
+      where: {
+        id,
+        clientId,
+      },
+    });
   }
 
   async getAll(clientId: string): Promise<Category[] | []> {
@@ -26,5 +35,21 @@ export class TypeORMCategoryRepository implements CategoryRepository {
         clientId,
       },
     });
+  }
+
+  async getByCategory(clientId: string, id: string): Promise<Category[] | []> {
+    return await this.repository.find({
+      where: {
+        id,
+        clientId,
+      },
+      relations: {
+        products: true,
+      },
+    });
+  }
+
+  async delete(id: string, clientId: string): Promise<void> {
+    await this.repository.delete({ id, clientId });
   }
 }

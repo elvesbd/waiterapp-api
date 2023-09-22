@@ -49,11 +49,6 @@ export class ProductController {
     return ProductViewModel.toHTTPArray(products);
   }
 
-  @Get('category/:categoryId')
-  async getByCategory(): Promise<any> {
-    return 'GetAllProductsByCategoryController';
-  }
-
   @Delete(':productId')
   async remove(): Promise<any> {
     return 'DeleteProductController';
