@@ -18,13 +18,11 @@ import {
   GetAllProductsByCategoryUseCase,
   UpdateCategoryUseCase,
 } from '@application/usecases/category';
+import { CategoryViewModel } from '@api/view-models/category-view-model';
 import { FileDto } from '@api/DTOs/shared';
-import { ResponseDto, UpdateRequestDto } from '@api/DTOs/category';
+import { UpdateRequestDto } from '@api/DTOs/category';
 import { CategoryApiPath } from './constants';
-import {
-  CategoryVMResponse,
-  CategoryViewModel,
-} from '@api/view-models/category-view-model';
+import { CategoryVMResponse } from '@api/view-models/types';
 
 @Controller(CategoryApiPath)
 export class CategoryController {
@@ -52,16 +50,20 @@ export class CategoryController {
   }
 
   @Get()
-  async getAll(): Promise<ResponseDto[] | []> {
+  async getAll(): Promise<CategoryVMResponse[] | []> {
     const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
     const categories = await this.getAllCategoriesUseCase.execute(clientId);
     return CategoryViewModel.toHTTPArray(categories);
   }
 
   @Get(':id/products')
-  async getByCategory(@Param('id') id: string): Promise<any> {
+  async getByCategory(@Param('id') id: string): Promise<CategoryVMResponse[]> {
     const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03ab';
-    return await this.getAllProductsByCategoryUseCase.execute(clientId, id);
+    const products = await this.getAllProductsByCategoryUseCase.execute(
+      clientId,
+      id,
+    );
+    return CategoryViewModel.toHTTPArray(products);
   }
 
   @HttpCode(204)

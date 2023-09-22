@@ -1,10 +1,4 @@
-import { Category } from '@application/domain/entities';
-
-export type CategoryVMResponse = {
-  id: string;
-  name: string;
-  imageUrl: string;
-};
+import { Category, CategoryVMResponse } from '@api/view-models/types';
 
 export class CategoryViewModel {
   public static toHTTP(model: Category): CategoryVMResponse {
@@ -12,6 +6,14 @@ export class CategoryViewModel {
       id: model.id,
       name: model.name,
       imageUrl: model.imageUrl,
+      products: model.products?.map((product) => ({
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+        ingredients: product.ingredients,
+      })),
     };
   }
 
