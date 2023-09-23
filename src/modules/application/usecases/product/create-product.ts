@@ -18,6 +18,7 @@ export class CreateProductUseCase {
     file: FileDto,
   ): Promise<OutputDto> {
     const path = await this.fileStorageService.upload({
+      clientId,
       originalname: input.name,
       buffer: file.buffer,
       width: 390,

@@ -19,6 +19,7 @@ export class CreateCategoryUseCase {
   ): Promise<OutputDto> {
     const { originalname, buffer } = file;
     const path = await this.fileStorageService.upload({
+      clientId,
       originalname,
       buffer,
       width: 20,

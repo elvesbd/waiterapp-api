@@ -27,6 +27,7 @@ export class UpdateProductUseCase {
     }
 
     const path = await this.fileStorageService.upload({
+      clientId,
       originalname: name,
       buffer: file.buffer,
       width: 390,

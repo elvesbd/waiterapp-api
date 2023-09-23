@@ -68,15 +68,21 @@ export class CategoryController {
 
   @HttpCode(204)
   @Patch(':id')
+  @UseInterceptors(FileInterceptor('file'))
   async update(
     @Param('id') id: string,
     @Body() updateRequestDto: UpdateRequestDto,
+    @UploadedFile() file?: FileDto,
   ): Promise<void> {
     const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
-    await this.updateCategoryUseCase.execute(id, {
-      clientId,
-      ...updateRequestDto,
-    });
+    await this.updateCategoryUseCase.execute(
+      id,
+      {
+        clientId,
+        ...updateRequestDto,
+      },
+      file,
+    );
   }
 
   @HttpCode(204)

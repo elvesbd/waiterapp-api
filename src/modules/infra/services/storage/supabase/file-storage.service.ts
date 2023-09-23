@@ -1,8 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { OptimizeImageFileService } from '@infra/utils';
+import { ExtractPathFromBucket, OptimizeImageFileService } from '@infra/utils';
 import { SupaBaseClientService } from '@infra/services/storage';
 import { FileStorageException } from '@infra/services/storage/exceptions';
+import { UploadInputFile } from '@application/domain/storage';
 
 @Injectable()
 export class SupaBaseFileStorageService {
@@ -14,8 +15,8 @@ export class SupaBaseFileStorageService {
   private readonly logger = new Logger(SupaBaseClientService.name);
   private readonly SUPABASE_BUCKET = this.configService.get('SUPABASE_BUCKET');
 
-  async upload(input: any): Promise<string> {
-    const { originalname, buffer, width, height } = input;
+  async upload(input: UploadInputFile): Promise<string> {
+    const { clientId, originalname, buffer, width, height } = input;
     const supabase = await this.getSupaBaseClient();
     const optimizedFileBuffer = await OptimizeImageFileService.handler(
       buffer,
@@ -28,7 +29,7 @@ export class SupaBaseFileStorageService {
         data: { path },
       } = await supabase.storage
         .from(this.SUPABASE_BUCKET)
-        .upload(originalname, optimizedFileBuffer, {
+        .upload(`${clientId}/${originalname}`, optimizedFileBuffer, {
           upsert: true,
         });
 
@@ -52,6 +53,18 @@ export class SupaBaseFileStorageService {
       this.logger.error(error.message);
       throw new FileStorageException();
     }
+  }
+
+  async remove(path: string): Promise<any> {
+    const supabase = await this.getSupaBaseClient();
+    const bucketPath = ExtractPathFromBucket.handler(path);
+
+    const { data, error } = await supabase.storage
+      .from(this.SUPABASE_BUCKET)
+      .remove([bucketPath]);
+
+    if (error) throw new FileStorageException();
+    return data;
   }
 
   private async getSupaBaseClient() {

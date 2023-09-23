@@ -17,10 +17,6 @@ export class TypeORMCategoryRepository implements CategoryRepository {
     await this.repository.save(category);
   }
 
-  public async update(id: string, input: Input): Promise<void> {
-    await this.repository.update(id, input);
-  }
-
   async getOne(id: string, clientId: string): Promise<Category> {
     return await this.repository.findOne({
       where: {
@@ -48,6 +44,10 @@ export class TypeORMCategoryRepository implements CategoryRepository {
         products: true,
       },
     });
+  }
+
+  public async update(id: string, input: Input): Promise<void> {
+    await this.repository.update(id, input);
   }
 
   async delete(id: string): Promise<void> {
