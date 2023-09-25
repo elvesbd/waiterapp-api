@@ -15,7 +15,6 @@ import {
 import {
   CreateProductUseCase,
   GetAllProductsUseCase,
-  UpdateProductUseCase,
   DeleteProductUseCase,
 } from '@application/usecases/product';
 import {
@@ -42,7 +41,6 @@ const orderProviders = [
 const productProviders = [
   CreateProductUseCase,
   GetAllProductsUseCase,
-  UpdateProductUseCase,
   DeleteProductUseCase,
 ];
 

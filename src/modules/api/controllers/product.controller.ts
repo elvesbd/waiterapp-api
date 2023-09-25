@@ -5,27 +5,30 @@ import {
   Get,
   HttpCode,
   Param,
-  Patch,
   Post,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import {
   CreateProductUseCase,
   GetAllProductsUseCase,
-  UpdateProductUseCase,
   DeleteProductUseCase,
 } from '@application/usecases/product';
-import {
-  ProductVMResponse,
-  ProductViewModel,
-} from '@api/view-models/product-view-model';
+import { CreateProductDto, ProductResponseDto } from '@api/DTOs/product';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileDto } from '@api/DTOs/shared';
-import { CreateProductDto, UpdateRequestDto } from '@api/DTOs/product';
 import { ProductApiPath, ProductApiTag } from './constants';
 
+@ApiBearerAuth('JWT-auth')
 @ApiTags(ProductApiTag)
 @Controller(ProductApiPath)
 export class ProductController {
@@ -33,47 +36,39 @@ export class ProductController {
     private readonly createProductUseCase: CreateProductUseCase,
     private readonly getAllProductsUseCase: GetAllProductsUseCase,
     private readonly deleteProductUseCase: DeleteProductUseCase,
-    private readonly updateProductUseCase: UpdateProductUseCase,
   ) {}
 
-  @Post()
+  @ApiOperation({ summary: 'create product' })
+  @ApiCreatedResponse({ type: ProductResponseDto })
+  @ApiBody({ type: CreateProductDto })
   @UseInterceptors(FileInterceptor('file'))
+  @Post()
   async create(
     @Body() createProductDto: CreateProductDto,
     @UploadedFile() file: FileDto,
-  ): Promise<ProductVMResponse> {
+  ): Promise<ProductResponseDto> {
     const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
-    const product = await this.createProductUseCase.execute(
+    return await this.createProductUseCase.execute(
       clientId,
       createProductDto,
       file,
     );
-    return ProductViewModel.toHTTP(product);
   }
 
+  @ApiOperation({ summary: 'get all products' })
+  @ApiOkResponse({ type: [ProductResponseDto] })
   @Get()
-  async getAll(): Promise<ProductVMResponse[]> {
-    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03ab';
-    const products = await this.getAllProductsUseCase.execute(clientId);
-    return ProductViewModel.toHTTPArray(products);
-  }
-
-  @HttpCode(204)
-  @Patch(':id')
-  @UseInterceptors(FileInterceptor('file'))
-  async update(
-    @Param('id') id: string,
-    @Body() updateRequestDto: UpdateRequestDto,
-    @UploadedFile() file?: FileDto,
-  ): Promise<void> {
+  async getAll(): Promise<ProductResponseDto[]> {
     const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
-    await this.updateProductUseCase.execute(id, {
-      clientId,
-      ...updateRequestDto,
-      ...file,
-    });
+    return await this.getAllProductsUseCase.execute(clientId);
   }
 
+  @ApiOperation({ summary: 'delete product' })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    required: true,
+  })
   @HttpCode(204)
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<void> {

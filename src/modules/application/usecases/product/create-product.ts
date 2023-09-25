@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductDto, OutputDto } from '@api/DTOs/product';
+import { CreateProductDto } from '@api/DTOs/product';
 import { FileDto } from '@api/DTOs/shared';
 import { ProductRepository } from '@application/domain/repositories';
 import { FileStorageService } from '@application/domain/storage';
 import { Product } from '@application/domain/entities';
+import { ProductOutput } from '@application/usecases/types/product';
 
 @Injectable()
 export class CreateProductUseCase {
@@ -16,7 +17,7 @@ export class CreateProductUseCase {
     clientId: string,
     input: CreateProductDto,
     file: FileDto,
-  ): Promise<OutputDto> {
+  ): Promise<ProductOutput> {
     const path = await this.fileStorageService.upload({
       clientId,
       originalname: file.originalname,

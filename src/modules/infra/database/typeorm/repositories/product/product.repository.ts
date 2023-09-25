@@ -1,44 +1,63 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Product } from '@application/domain/entities';
 import { ProductRepository } from '@application/domain/repositories';
 import { TypeORMProductEntity, dataSource } from '@infra/database/typeorm';
-import { Input } from '@application/usecases/types/product';
 
 @Injectable()
 export class TypeORMProductRepository implements ProductRepository {
-  private repository: Repository<TypeORMProductEntity>;
-
   constructor() {
     this.repository = dataSource.getRepository(TypeORMProductEntity);
   }
+  private repository: Repository<TypeORMProductEntity>;
+  private logger = new Logger(TypeORMProductRepository.name);
 
   async save(category: Product): Promise<void> {
-    await this.repository.save(category);
+    try {
+      await this.repository.save(category);
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new InternalServerErrorException();
+    }
   }
 
   async getOne(id: string, clientId: string): Promise<Product> {
-    return await this.repository.findOne({
-      where: {
-        id,
-        clientId,
-      },
-    });
+    try {
+      return await this.repository.findOne({
+        where: {
+          id,
+          clientId,
+        },
+      });
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new InternalServerErrorException();
+    }
   }
 
   async getAll(clientId: string): Promise<Product[] | []> {
-    return await this.repository.find({
-      where: {
-        clientId,
-      },
-    });
-  }
-
-  public async update(id: string, input: Input): Promise<void> {
-    await this.repository.update(id, input);
+    try {
+      return await this.repository.find({
+        where: {
+          clientId,
+        },
+      });
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new InternalServerErrorException();
+    }
   }
 
   async delete(id: string): Promise<void> {
-    await this.repository.delete({ id });
+    try {
+      await this.repository.delete({ id });
+    } catch (error) {
+      this.logger.error(error.message);
+      throw new InternalServerErrorException();
+    }
   }
 }

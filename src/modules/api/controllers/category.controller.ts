@@ -10,6 +10,7 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiCreatedResponse,
   ApiNoContentResponse,
@@ -32,6 +33,7 @@ import {
   GetAllProductsByCategoryResponseDto,
 } from '@api/DTOs/category';
 
+@ApiBearerAuth('JWT-auth')
 @ApiTags(CategoryApiTag)
 @Controller(CategoryApiPath)
 export class CategoryController {

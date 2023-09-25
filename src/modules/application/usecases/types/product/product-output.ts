@@ -1,4 +1,4 @@
-export class OutputDto {
+export class ProductOutput {
   id: string;
   name: string;
   description?: string;
