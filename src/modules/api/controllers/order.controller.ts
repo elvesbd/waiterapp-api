@@ -1,6 +1,8 @@
 import { Controller, Get, Patch, Post } from '@nestjs/common';
-import { OrderApiPath } from './constants';
+import { ApiTags } from '@nestjs/swagger';
+import { OrderApiPath, OrderApiTag } from './constants';
 
+@ApiTags(OrderApiTag)
 @Controller(OrderApiPath)
 export class OrderController {
   constructor() {}

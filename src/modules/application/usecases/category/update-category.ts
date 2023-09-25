@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Input } from '@application/usecases/types/category';
+import {
+  CategoryInput,
+  CategoryOutput,
+} from '@application/usecases/types/category';
 import { CategoryRepository } from '@application/domain/repositories';
 import { CategoryNotFoundException } from '@application/exceptions/category';
 import { FileStorageService } from '@application/domain/storage';
@@ -13,18 +16,22 @@ export class UpdateCategoryUseCase {
     private readonly fileStorageService: FileStorageService,
   ) {}
 
-  async execute(id: string, input: Input, file: FileDto): Promise<void> {
-    const { clientId, name } = input;
-    const category = await this.categoryRepository.getOne(id, clientId);
+  async execute(
+    clientId: string,
+    input: CategoryInput,
+    file: FileDto,
+  ): Promise<CategoryOutput> {
+    const { id, name } = input;
+    const category = await this.categoryRepository.getOne(clientId, id);
     if (!category) throw new CategoryNotFoundException();
 
     if (!file) {
       const updatedCategory = {
         ...category,
         ...input,
-        name: CapitalizeNameService.handler(input.name),
+        name: CapitalizeNameService.handler(name),
       };
-      await this.categoryRepository.update(id, updatedCategory);
+      await this.categoryRepository.update(updatedCategory);
       return;
     }
 
@@ -40,10 +47,10 @@ export class UpdateCategoryUseCase {
     const updatedCategory = {
       ...category,
       ...input,
-      name: CapitalizeNameService.handler(input.name),
+      name: CapitalizeNameService.handler(name),
       imageUrl,
     };
 
-    return await this.categoryRepository.update(id, updatedCategory);
+    return await this.categoryRepository.update(updatedCategory);
   }
 }

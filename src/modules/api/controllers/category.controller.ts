@@ -10,6 +10,15 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   CreateCategoryUseCase,
@@ -18,12 +27,15 @@ import {
   GetAllProductsByCategoryUseCase,
   UpdateCategoryUseCase,
 } from '@application/usecases/category';
-import { CategoryViewModel } from '@api/view-models/category-view-model';
 import { FileDto } from '@api/DTOs/shared';
-import { UpdateRequestDto } from '@api/DTOs/category';
-import { CategoryApiPath } from './constants';
-import { CategoryVMResponse } from '@api/view-models/types';
+import { CategoryApiPath, CategoryApiTag } from './constants';
+import {
+  CategoryResponseDto,
+  GetAllProductsByCategoryResponseDto,
+  UpdateCategoryRequestDto,
+} from '@api/DTOs/category';
 
+@ApiTags(CategoryApiTag)
 @Controller(CategoryApiPath)
 export class CategoryController {
   constructor(
@@ -34,61 +46,96 @@ export class CategoryController {
     private readonly getAllProductsByCategoryUseCase: GetAllProductsByCategoryUseCase,
   ) {}
 
-  @Post()
+  @ApiOperation({ summary: 'create category' })
+  @ApiCreatedResponse({ type: CategoryResponseDto })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        file: {
+          type: 'object',
+          properties: {
+            fieldname: { type: 'string' },
+            originalname: { type: 'string' },
+            mimetype: { type: 'string' },
+            buffer: { type: 'object', format: 'binary' },
+            size: { type: 'number' },
+          },
+        },
+      },
+    },
+  })
   @UseInterceptors(FileInterceptor('file'))
+  @Post()
   async create(
     @Body('name') name: string,
     @UploadedFile() file: FileDto,
-  ): Promise<CategoryVMResponse> {
+  ): Promise<CategoryResponseDto> {
     const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
-    const category = await this.createCategoryUseCase.execute(
-      clientId,
-      name,
-      file,
-    );
-    return CategoryViewModel.toHTTP(category);
+    return await this.createCategoryUseCase.execute(clientId, name, file);
   }
 
+  @ApiOperation({ summary: 'get all categories' })
+  @ApiOkResponse({ type: [CategoryResponseDto] })
   @Get()
-  async getAll(): Promise<CategoryVMResponse[] | []> {
+  async getAll(): Promise<CategoryResponseDto[] | []> {
     const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
-    const categories = await this.getAllCategoriesUseCase.execute(clientId);
-    return CategoryViewModel.toHTTPArray(categories);
+    return await this.getAllCategoriesUseCase.execute(clientId);
   }
 
+  @ApiOperation({ summary: 'get all products by category' })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    required: true,
+  })
+  @ApiOkResponse({ type: GetAllProductsByCategoryResponseDto })
   @Get(':id/products')
-  async getByCategory(@Param('id') id: string): Promise<CategoryVMResponse[]> {
-    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03ab';
-    const products = await this.getAllProductsByCategoryUseCase.execute(
-      clientId,
-      id,
-    );
-    return CategoryViewModel.toHTTPArray(products);
+  async getByCategory(
+    @Param('id') id: string,
+  ): Promise<GetAllProductsByCategoryResponseDto[]> {
+    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
+    return await this.getAllProductsByCategoryUseCase.execute(clientId, id);
   }
 
-  @HttpCode(204)
-  @Patch(':id')
   @UseInterceptors(FileInterceptor('file'))
+  @ApiOperation({ summary: 'update category' })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    required: true,
+  })
+  @ApiOkResponse({ type: CategoryResponseDto })
+  @ApiBody({ type: UpdateCategoryRequestDto })
+  @Patch(':id')
   async update(
     @Param('id') id: string,
-    @Body() updateRequestDto: UpdateRequestDto,
+    @Body() updateCategoryRequestDto: UpdateCategoryRequestDto,
     @UploadedFile() file?: FileDto,
-  ): Promise<void> {
+  ): Promise<CategoryResponseDto> {
     const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
-    await this.updateCategoryUseCase.execute(
-      id,
+    return await this.updateCategoryUseCase.execute(
+      clientId,
       {
-        clientId,
-        ...updateRequestDto,
+        id,
+        ...updateCategoryRequestDto,
       },
       file,
     );
   }
 
+  @ApiOperation({ summary: 'delete category' })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    required: true,
+  })
+  @ApiNoContentResponse()
   @HttpCode(204)
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<void> {
     const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
-    await this.deleteCategoryUseCase.execute(id, clientId);
+    await this.deleteCategoryUseCase.execute(clientId, id);
   }
 }

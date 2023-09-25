@@ -1,5 +1,3 @@
-export { OutputDto } from './output.dto';
-export { InputDto } from './input.dto';
-export { RequestDto } from './request.dto';
-export { ResponseDto } from './response.dto';
-export { UpdateRequestDto } from './update-request.dto';
+export { UpdateCategoryRequestDto } from './update-category-request.dto';
+export { GetAllProductsByCategoryResponseDto } from './get-all-products-by-category-response.dto';
+export { CategoryResponseDto } from './category-response.dto';

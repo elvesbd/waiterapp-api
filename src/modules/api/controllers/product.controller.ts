@@ -10,6 +10,7 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import {
   CreateProductUseCase,
   GetAllProductsUseCase,
@@ -23,8 +24,9 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileDto } from '@api/DTOs/shared';
 import { CreateProductDto, UpdateRequestDto } from '@api/DTOs/product';
-import { ProductApiPath } from './constants';
+import { ProductApiPath, ProductApiTag } from './constants';
 
+@ApiTags(ProductApiTag)
 @Controller(ProductApiPath)
 export class ProductController {
   constructor(
@@ -40,7 +42,7 @@ export class ProductController {
     @Body() createProductDto: CreateProductDto,
     @UploadedFile() file: FileDto,
   ): Promise<ProductVMResponse> {
-    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03ab';
+    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
     const product = await this.createProductUseCase.execute(
       clientId,
       createProductDto,
@@ -51,7 +53,7 @@ export class ProductController {
 
   @Get()
   async getAll(): Promise<ProductVMResponse[]> {
-    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
+    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03ab';
     const products = await this.getAllProductsUseCase.execute(clientId);
     return ProductViewModel.toHTTPArray(products);
   }

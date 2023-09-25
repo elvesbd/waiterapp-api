@@ -10,8 +10,8 @@ export class DeleteCategoryUseCase {
     private readonly fileStorageService: FileStorageService,
   ) {}
 
-  async execute(id: string, clientId: string): Promise<void> {
-    const category = await this.categoryRepository.getOne(id, clientId);
+  async execute(clientId: string, id: string): Promise<void> {
+    const category = await this.categoryRepository.getOne(clientId, id);
     if (!category) throw new CategoryNotFoundException();
 
     await this.fileStorageService.remove(category.imageUrl);

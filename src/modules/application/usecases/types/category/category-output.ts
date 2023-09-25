@@ -1,4 +1,4 @@
-export class OutputDto {
+export class CategoryOutput {
   id: string;
   name: string;
   imageUrl: string;

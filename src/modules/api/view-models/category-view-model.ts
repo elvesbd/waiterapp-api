@@ -1,4 +1,16 @@
-import { Category, CategoryVMResponse } from '@api/view-models/types';
+import { Category } from '@api/view-models/types';
+import { ApiProperty } from '@nestjs/swagger';
+
+export class CategoryVMResponse {
+  @ApiProperty({ type: String, description: 'Id da categoria' })
+  id: string;
+
+  @ApiProperty({ type: String, description: 'Nome da categoria' })
+  name: string;
+
+  @ApiProperty({ type: String, description: 'URL da imagem da categoria' })
+  imageUrl: string;
+}
 
 export class CategoryViewModel {
   public static toHTTP(model: Category): CategoryVMResponse {
@@ -6,14 +18,6 @@ export class CategoryViewModel {
       id: model.id,
       name: model.name,
       imageUrl: model.imageUrl,
-      products: model.products?.map((product) => ({
-        id: product.id,
-        name: product.name,
-        description: product.description,
-        price: product.price,
-        imageUrl: product.imageUrl,
-        ingredients: product.ingredients,
-      })),
     };
   }
 

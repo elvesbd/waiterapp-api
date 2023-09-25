@@ -2,7 +2,11 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ExtractPathFromBucket, OptimizeImageFileService } from '@infra/utils';
 import { SupaBaseClientService } from '@infra/services/storage';
-import { FileStorageException } from '@infra/services/storage/exceptions';
+import {
+  FileStorageGetUrlException,
+  FileStorageRemoveException,
+  FileStorageUploadException,
+} from '@infra/services/storage/exceptions';
 import { UploadInputFile } from '@application/domain/storage';
 
 @Injectable()
@@ -24,35 +28,34 @@ export class SupaBaseFileStorageService {
       height,
     );
 
-    try {
-      const {
-        data: { path },
-      } = await supabase.storage
-        .from(this.SUPABASE_BUCKET)
-        .upload(`${clientId}/${originalname}`, optimizedFileBuffer, {
-          upsert: true,
-        });
+    const {
+      data: { path },
+      error,
+    } = await supabase.storage
+      .from(this.SUPABASE_BUCKET)
+      .upload(`${clientId}/${originalname}`, optimizedFileBuffer, {
+        upsert: true,
+      });
 
-      return path;
-    } catch (error) {
+    if (error) {
       this.logger.error(error.message);
-      throw new FileStorageException();
+      throw new FileStorageUploadException();
     }
+    return path;
   }
 
   async getUrl(path: string): Promise<string> {
     const supabase = await this.getSupaBaseClient();
 
-    try {
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from(this.SUPABASE_BUCKET).getPublicUrl(path);
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from(this.SUPABASE_BUCKET).getPublicUrl(path);
 
-      return publicUrl;
-    } catch (error) {
-      this.logger.error(error.message);
-      throw new FileStorageException();
+    if (!publicUrl) {
+      this.logger.error('Não foi possível obter a url da imagem!');
+      throw new FileStorageGetUrlException();
     }
+    return publicUrl;
   }
 
   async remove(path: string): Promise<any> {
@@ -63,7 +66,11 @@ export class SupaBaseFileStorageService {
       .from(this.SUPABASE_BUCKET)
       .remove([bucketPath]);
 
-    if (error) throw new FileStorageException();
+    if (error) {
+      console.log('caiu aqui');
+      this.logger.error(error.message);
+      throw new FileStorageRemoveException();
+    }
     return data;
   }
 

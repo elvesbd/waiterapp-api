@@ -1,4 +1,6 @@
-export type Product = {
+import { ApiProperty } from '@nestjs/swagger';
+
+export class Product {
   id: string;
   name: string;
   description: string;
@@ -8,13 +10,24 @@ export type Product = {
   categoryId: string;
   clientId: string;
   createdAt: Date;
-};
+}
 
-export type ProductsVMResponse = {
+export class ProductsVMResponse {
+  @ApiProperty()
   id: string;
+
+  @ApiProperty()
   name: string;
+
+  @ApiProperty()
   description: string;
+
+  @ApiProperty()
   price: number;
+
+  @ApiProperty()
   imageUrl: string;
+
+  @ApiProperty()
   ingredients: string[];
-};
+}

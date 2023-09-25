@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { OutputDto } from '@api/DTOs/category';
 import { FileDto } from '@api/DTOs/shared';
 import { Category } from '@application/domain/entities';
 import { CategoryRepository } from '@application/domain/repositories';
 import { FileStorageService } from '@application/domain/storage';
+import { CategoryOutput } from '@application/usecases/types/category';
 
 @Injectable()
 export class CreateCategoryUseCase {
@@ -16,7 +16,7 @@ export class CreateCategoryUseCase {
     clientId: string,
     name: string,
     file: FileDto,
-  ): Promise<OutputDto> {
+  ): Promise<CategoryOutput> {
     const { originalname, buffer } = file;
     const path = await this.fileStorageService.upload({
       clientId,
