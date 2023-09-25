@@ -5,7 +5,6 @@ import {
   CreateCategoryUseCase,
   GetAllCategoriesUseCase,
   GetAllProductsByCategoryUseCase,
-  UpdateCategoryUseCase,
   DeleteCategoryUseCase,
 } from '@application/usecases/category';
 import {
@@ -33,7 +32,6 @@ const categoryProviders = [
   CreateCategoryUseCase,
   GetAllCategoriesUseCase,
   GetAllProductsByCategoryUseCase,
-  UpdateCategoryUseCase,
   DeleteCategoryUseCase,
 ];
 const orderProviders = [

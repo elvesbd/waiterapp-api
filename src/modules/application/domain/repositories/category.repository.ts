@@ -9,6 +9,5 @@ export abstract class CategoryRepository {
     clientId: string,
     id: string,
   ): Promise<GetAllProductsByCategoryResponseDto[] | []>;
-  public abstract update(category: Category): Promise<Category>;
   public abstract delete(id: string): Promise<void>;
 }

@@ -5,7 +5,6 @@ import {
   Get,
   HttpCode,
   Param,
-  Patch,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -25,14 +24,12 @@ import {
   DeleteCategoryUseCase,
   GetAllCategoriesUseCase,
   GetAllProductsByCategoryUseCase,
-  UpdateCategoryUseCase,
 } from '@application/usecases/category';
 import { FileDto } from '@api/DTOs/shared';
 import { CategoryApiPath, CategoryApiTag } from './constants';
 import {
   CategoryResponseDto,
   GetAllProductsByCategoryResponseDto,
-  UpdateCategoryRequestDto,
 } from '@api/DTOs/category';
 
 @ApiTags(CategoryApiTag)
@@ -42,7 +39,6 @@ export class CategoryController {
     private readonly createCategoryUseCase: CreateCategoryUseCase,
     private readonly getAllCategoriesUseCase: GetAllCategoriesUseCase,
     private readonly deleteCategoryUseCase: DeleteCategoryUseCase,
-    private readonly updateCategoryUseCase: UpdateCategoryUseCase,
     private readonly getAllProductsByCategoryUseCase: GetAllProductsByCategoryUseCase,
   ) {}
 
@@ -97,32 +93,6 @@ export class CategoryController {
   ): Promise<GetAllProductsByCategoryResponseDto[]> {
     const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
     return await this.getAllProductsByCategoryUseCase.execute(clientId, id);
-  }
-
-  @UseInterceptors(FileInterceptor('file'))
-  @ApiOperation({ summary: 'update category' })
-  @ApiParam({
-    name: 'id',
-    type: String,
-    required: true,
-  })
-  @ApiOkResponse({ type: CategoryResponseDto })
-  @ApiBody({ type: UpdateCategoryRequestDto })
-  @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() updateCategoryRequestDto: UpdateCategoryRequestDto,
-    @UploadedFile() file?: FileDto,
-  ): Promise<CategoryResponseDto> {
-    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
-    return await this.updateCategoryUseCase.execute(
-      clientId,
-      {
-        id,
-        ...updateCategoryRequestDto,
-      },
-      file,
-    );
   }
 
   @ApiOperation({ summary: 'delete category' })

@@ -70,18 +70,6 @@ export class TypeORMCategoryRepository implements CategoryRepository {
     }
   }
 
-  public async update(category: Category): Promise<Category> {
-    try {
-      return await this.repository.save({
-        id: category.id,
-        ...category,
-      });
-    } catch (error) {
-      this.logger.error(error.message);
-      throw new InternalServerErrorException();
-    }
-  }
-
   async delete(id: string): Promise<void> {
     try {
       await this.repository.delete({ id });
