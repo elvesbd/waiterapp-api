@@ -4,6 +4,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { DatabaseService } from '@infra/database/services';
 import {
   TypeORMCategoryRepository,
+  TypeORMOrderRepository,
   TypeORMProductRepository,
   dataSource,
 } from '@infra/database/typeorm';
@@ -28,12 +29,14 @@ import {
   ],
   providers: [
     TypeORMCategoryRepository,
+    TypeORMOrderRepository,
     TypeORMProductRepository,
     SupaBaseFileStorageService,
     SupaBaseClientService,
   ],
   exports: [
     TypeORMCategoryRepository,
+    TypeORMOrderRepository,
     TypeORMProductRepository,
     SupaBaseFileStorageService,
     SupaBaseClientService,

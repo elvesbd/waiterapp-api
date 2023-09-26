@@ -19,10 +19,12 @@ import {
 } from '@application/usecases/product';
 import {
   CategoryRepository,
+  OrderRepository,
   ProductRepository,
 } from '@application/domain/repositories';
 import {
   TypeORMCategoryRepository,
+  TypeORMOrderRepository,
   TypeORMProductRepository,
 } from 'modules/infra/database/typeorm';
 import { FileStorageService } from '@application/domain/storage';
@@ -53,6 +55,10 @@ const productProviders = [
     {
       provide: CategoryRepository,
       useClass: TypeORMCategoryRepository,
+    },
+    {
+      provide: OrderRepository,
+      useClass: TypeORMOrderRepository,
     },
     {
       provide: ProductRepository,

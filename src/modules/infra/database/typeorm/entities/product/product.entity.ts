@@ -3,10 +3,13 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { TypeORMCategoryEntity } from '../category/category.entity';
+import { TypeORMOrderEntity } from '../order/order.entity';
 
 @Entity({ name: 'products' })
 export class TypeORMProductEntity {
@@ -40,4 +43,8 @@ export class TypeORMProductEntity {
   @ManyToOne(() => TypeORMCategoryEntity, (category) => category.products)
   @JoinColumn({ name: 'categoryId' })
   category: TypeORMCategoryEntity;
+
+  @ManyToMany(() => TypeORMOrderEntity, (order) => order.products)
+  @JoinTable()
+  orders: TypeORMOrderEntity[];
 }

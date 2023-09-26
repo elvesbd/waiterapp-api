@@ -1,8 +1,8 @@
 import { Logger } from '@nestjs/common';
 import { MigrationInterface, QueryRunner, Table, TableIndex } from 'typeorm';
 
-export class CreateTableCategories1695322861551 implements MigrationInterface {
-  private readonly logger = new Logger(CreateTableCategories1695322861551.name);
+export class CreateTableCategories1695675496286 implements MigrationInterface {
+  private readonly logger = new Logger(CreateTableCategories1695675496286.name);
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     this.logger.log('Up migrations');
@@ -14,6 +14,7 @@ export class CreateTableCategories1695322861551 implements MigrationInterface {
             name: 'id',
             type: 'uuid',
             isPrimary: true,
+            generationStrategy: 'uuid',
           },
           {
             name: 'name',
