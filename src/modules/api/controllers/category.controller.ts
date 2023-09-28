@@ -24,7 +24,7 @@ import {
   CreateCategoryUseCase,
   DeleteCategoryUseCase,
   GetAllCategoriesUseCase,
-} from '@application/usecases/category';
+} from '@core/usecases/category';
 import { FileDto } from '@api/DTOs/shared';
 import { CategoryApiPath, CategoryApiTag } from './constants';
 import { CategoryVMResponse, CategoryViewModel } from '@api/view-models';

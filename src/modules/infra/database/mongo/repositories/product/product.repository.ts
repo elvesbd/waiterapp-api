@@ -5,8 +5,8 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Product } from '@application/domain/entities';
-import { ProductRepository } from '@application/domain/repositories';
+import { Product } from '@core/domain/entities';
+import { ProductRepository } from '@core/domain/repositories';
 import { ProductModel } from '@infra/database/mongo/models';
 import { ProductMapper } from '@infra/database/mongo/mappers/product';
 

@@ -12,7 +12,7 @@ const config: Config = {
   testEnvironment: 'node',
   moduleNameMapper: {
     '@api/(.+)': '<rootDir>/modules/api/$1',
-    '@application/(.+)': '<rootDir>/modules/application/$1',
+    '@core/(.+)': '<rootDir>/modules/core/$1',
     '@infra/(.+)': '<rootDir>/modules/infra/$1',
   },
 };

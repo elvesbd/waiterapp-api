@@ -23,7 +23,7 @@ import {
   GetAllProductsUseCase,
   DeleteProductUseCase,
   GetAllProductsByCategoryUseCase,
-} from '@application/usecases/product';
+} from '@core/usecases/product';
 import { CreateProductDto } from '@api/DTOs/product';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileDto } from '@api/DTOs/shared';

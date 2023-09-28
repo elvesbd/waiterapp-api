@@ -1,4 +1,4 @@
-import { Product } from '@application/domain/entities';
+import { Product } from '@core/domain/entities';
 
 export abstract class ProductRepository {
   public abstract getOne(id: string, clientId: string): Promise<Product>;

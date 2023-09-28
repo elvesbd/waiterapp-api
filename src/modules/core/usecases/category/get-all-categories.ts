@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CategoryRepository } from '@application/domain/repositories';
-import { CategoryOutput } from '@application/usecases/types/category';
+import { CategoryOutput } from '@core/usecases/types/category';
+import { CategoryRepository } from '@core/domain/repositories';
 
 @Injectable()
 export class GetAllCategoriesUseCase {

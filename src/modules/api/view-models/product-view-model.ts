@@ -1,5 +1,5 @@
-import { Product } from '@application/domain/entities';
 import { ApiProperty } from '@nestjs/swagger';
+import { Product } from '@core/domain/entities';
 
 export class ProductVMResponse {
   @ApiProperty({ type: String, description: 'Id do produto' })

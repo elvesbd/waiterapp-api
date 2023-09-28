@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-import { OrderStatus } from '@application/domain/entities/order';
+import { OrderStatus } from '@core/domain/entities/order';
 import { UUID } from 'typeorm/driver/mongodb/bson.typings';
 
 @Schema()

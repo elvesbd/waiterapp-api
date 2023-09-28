@@ -1,4 +1,4 @@
-import { OrderProductOutput } from '@application/usecases/types/order';
+import { OrderProductOutput } from '@core/usecases/types/order';
 
 export type OrderInput = {
   table: string;

@@ -19,7 +19,7 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@api/*": ["./modules/api/*"],
-      "@application/*": ["./modules/application/*"],
+      "@core/*": ["./modules/core/*"],
       "@infra/*": ["./modules/infra/*"]
     },
     "rootDirs": ["./", "../tests/"]

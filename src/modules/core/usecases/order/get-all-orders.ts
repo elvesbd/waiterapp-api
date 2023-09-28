@@ -1,5 +1,5 @@
-import { OrderRepository } from '@application/domain/repositories';
 import { Injectable } from '@nestjs/common';
+import { OrderRepository } from '@core/domain/repositories';
 
 @Injectable()
 export class GetAllOrdersUseCase {

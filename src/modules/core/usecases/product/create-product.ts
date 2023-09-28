@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductDto } from '@api/DTOs/product';
 import { FileDto } from '@api/DTOs/shared';
-import { ProductRepository } from '@application/domain/repositories';
-import { FileStorageService } from '@application/domain/storage';
-import { Product } from '@application/domain/entities';
+import { CreateProductDto } from '@api/DTOs/product';
+import { Product } from '@core/domain/entities';
+import { FileStorageService } from '@core/domain/storage';
+import { ProductRepository } from '@core/domain/repositories';
 
 const PRODUCTS_IMAGE_FOLDER = 'products';
 

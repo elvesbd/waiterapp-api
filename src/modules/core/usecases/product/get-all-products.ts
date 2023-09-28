@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ProductRepository } from '@application/domain/repositories';
-import { ProductOutput } from '@application/usecases/types/product';
-
+import { ProductRepository } from '@core/domain/repositories';
+import { ProductOutput } from '@core/usecases/types/product';
 @Injectable()
 export class GetAllProductsUseCase {
   constructor(private readonly productRepository: ProductRepository) {}

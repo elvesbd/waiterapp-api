@@ -1,4 +1,4 @@
-import { OrderStatus } from '@application/domain/entities/order';
+import { OrderStatus } from '@core/domain/entities/order';
 
 export type OrderProductOutput = {
   productId: string;

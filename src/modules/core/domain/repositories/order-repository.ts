@@ -1,4 +1,4 @@
-import { Order } from '@application/domain/entities';
+import { Order } from '@core/domain/entities';
 
 export abstract class OrderRepository {
   public abstract getAll(clientId: string): Promise<Order[] | []>;

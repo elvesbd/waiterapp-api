@@ -1,7 +1,7 @@
-import { ProductRepository } from '@application/domain/repositories';
-import { FileStorageService } from '@application/domain/storage';
-import { ProductNotFoundException } from '@application/exceptions/product';
 import { Injectable } from '@nestjs/common';
+import { FileStorageService } from '@core/domain/storage';
+import { ProductRepository } from '@core/domain/repositories';
+import { ProductNotFoundException } from '@core/exceptions/product';
 
 @Injectable()
 export class DeleteProductUseCase {

@@ -1,5 +1,5 @@
-import { Category } from '@application/domain/entities';
 import { ApiProperty } from '@nestjs/swagger';
+import { Category } from '@core/domain/entities';
 
 export class CategoryVMResponse {
   @ApiProperty({ type: String, description: 'Id da categoria' })

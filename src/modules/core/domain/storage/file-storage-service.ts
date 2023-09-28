@@ -1,4 +1,4 @@
-import { UploadInputFile } from '@application/domain/storage';
+import { UploadInputFile } from '@core/domain/storage';
 
 export abstract class FileStorageService {
   public abstract getUrl(path: string): Promise<string>;

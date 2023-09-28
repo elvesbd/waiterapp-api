@@ -1,7 +1,7 @@
-import { CategoryRepository } from '@application/domain/repositories';
-import { FileStorageService } from '@application/domain/storage';
-import { CategoryNotFoundException } from '@application/exceptions/category';
 import { Injectable } from '@nestjs/common';
+import { FileStorageService } from '@core/domain/storage';
+import { CategoryRepository } from '@core/domain/repositories';
+import { CategoryNotFoundException } from '@core/exceptions/category';
 
 @Injectable()
 export class DeleteCategoryUseCase {

@@ -1,4 +1,4 @@
-import { Category } from '@application/domain/entities';
+import { Category } from '@core/domain/entities';
 import { CategoryModel } from '../../models';
 
 export class CategoryMapper {

@@ -1,4 +1,4 @@
-import { Order } from '@application/domain/entities';
+import { Order } from '@core/domain/entities';
 import { OrderModel } from '@infra/database/mongo/models';
 
 export class OrderMapper {

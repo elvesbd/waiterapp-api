@@ -1,4 +1,4 @@
-import { Product } from '@application/domain/entities';
+import { Product } from '@core/domain/entities';
 import { ProductModel } from '@infra/database/mongo/models';
 
 export class ProductMapper {

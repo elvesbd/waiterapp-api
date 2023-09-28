@@ -1,4 +1,4 @@
-import { Category } from '@application/domain/entities';
+import { Category } from '@core/domain/entities';
 
 export abstract class CategoryRepository {
   public abstract getOne(clientId: string, id: string): Promise<Category>;

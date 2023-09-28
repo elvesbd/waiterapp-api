@@ -1,29 +1,29 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { InfraModule } from '@infra/infra.module';
-import { FileStorageService } from '@application/domain/storage';
+import { FileStorageService } from '@core/domain/storage';
 import { SupaBaseFileStorageService } from '@infra/services/storage';
 import {
   CreateCategoryUseCase,
   GetAllCategoriesUseCase,
   DeleteCategoryUseCase,
-} from '@application/usecases/category';
+} from '@core/usecases/category';
 import {
   CreateOrderUseCase,
   GetAllOrdersUseCase,
   ChangeOrderStatusUseCase,
-} from '@application/usecases/order';
+} from '@core/usecases/order';
 import {
   CreateProductUseCase,
   GetAllProductsUseCase,
   DeleteProductUseCase,
   GetAllProductsByCategoryUseCase,
-} from '@application/usecases/product';
+} from '@core/usecases/product';
 import {
   CategoryRepository,
   OrderRepository,
   ProductRepository,
-} from '@application/domain/repositories';
+} from '@core/domain/repositories';
 import {
   MongoDBCategoryRepository,
   MongoDBOrderRepository,
@@ -87,4 +87,4 @@ const productProviders = [
   ],
   exports: [...categoryProviders, ...orderProviders, ...productProviders],
 })
-export class ApplicationModule {}
+export class CoreModule {}

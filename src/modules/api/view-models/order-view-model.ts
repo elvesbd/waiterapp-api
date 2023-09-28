@@ -1,6 +1,6 @@
-import { OrderProductsDto } from '@api/DTOs/order';
-import { Order } from '@application/domain/entities';
 import { ApiProperty } from '@nestjs/swagger';
+import { Order } from '@core/domain/entities';
+import { OrderProductsDto } from '@api/DTOs/order';
 
 export class OrderVMResponse {
   @ApiProperty({ type: String, description: 'Id do pedido' })

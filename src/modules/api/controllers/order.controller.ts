@@ -12,7 +12,7 @@ import {
   ChangeOrderStatusUseCase,
   CreateOrderUseCase,
   GetAllOrdersUseCase,
-} from '@application/usecases/order';
+} from '@core/usecases/order';
 import { CreateOrderDto } from '@api/DTOs/order';
 import { OrderVMResponse, OrderViewModel } from '@api/view-models';
 

@@ -7,7 +7,7 @@ import {
   FileStorageRemoveException,
   FileStorageUploadException,
 } from '@infra/services/storage/exceptions';
-import { UploadInputFile } from '@application/domain/storage';
+import { UploadInputFile } from '@core/domain/storage';
 
 @Injectable()
 export class SupaBaseFileStorageService {

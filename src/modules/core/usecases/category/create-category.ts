@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { FileDto } from '@api/DTOs/shared';
-import { Category } from '@application/domain/entities';
-import { CategoryRepository } from '@application/domain/repositories';
-import { FileStorageService } from '@application/domain/storage';
+import { Category } from '@core/domain/entities';
+import { FileStorageService } from '@core/domain/storage';
+import { CategoryRepository } from '@core/domain/repositories';
 
 const CATEGORIES_IMAGE_FOLDER = 'categories';
 

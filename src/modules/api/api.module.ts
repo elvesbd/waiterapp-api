@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ApplicationModule } from '@application/application.module';
+import { CoreModule } from '@core/core.module';
 import {
   CategoryController,
   OrderController,
@@ -7,7 +7,7 @@ import {
 } from '@api/controllers';
 
 @Module({
-  imports: [ApplicationModule],
+  imports: [CoreModule],
   controllers: [CategoryController, OrderController, ProductController],
 })
 export class ApiModule {}
