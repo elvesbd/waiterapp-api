@@ -1,13 +1,13 @@
-export class ProductsByCategoryOutput {
+export type ProductsByCategoryOutput = {
   id: string;
   name: string;
   imageUrl: string;
   clientId: string;
   createdAt: Date;
   products: Product[];
-}
+};
 
-class Product {
+type Product = {
   id: string;
   name: string;
   description: string;
@@ -17,4 +17,4 @@ class Product {
   categoryId: string;
   clientId: string;
   createdAt: Date;
-}
+};

@@ -1,4 +1,4 @@
-import { Category } from '@api/view-models/types';
+import { Category } from '@application/domain/entities';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CategoryVMResponse {

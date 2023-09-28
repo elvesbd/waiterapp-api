@@ -1,18 +1,31 @@
-import { BaseEntity } from '@application/domain/entities/base';
 import { CapitalizeNameService } from '@infra/utils';
+import { BaseEntity } from './base';
+
+type Input = {
+  clientId: string;
+  name: string;
+  imageUrl: string;
+};
 
 export class Category extends BaseEntity {
-  public readonly id: string;
-  public readonly name: string;
-  public readonly imageUrl: string;
-  public readonly clientId: string;
-  public readonly createdAt: Date;
+  updatedAt?: Date;
 
-  constructor(name: string, imageUrl: string, clientId: string) {
+  constructor(
+    readonly name: string,
+    readonly imageUrl: string,
+    readonly clientId: string,
+  ) {
     super();
-    this.name = CapitalizeNameService.handler(name);
-    this.imageUrl = imageUrl;
-    this.clientId = clientId;
-    this.createdAt = new Date();
+  }
+
+  static create({ clientId, name, imageUrl }: Input) {
+    const capitalizeFirstLetterOfCategoryName =
+      CapitalizeNameService.handler(name);
+
+    return new Category(
+      capitalizeFirstLetterOfCategoryName,
+      imageUrl,
+      clientId,
+    );
   }
 }

@@ -27,7 +27,7 @@ export class CreateProductUseCase {
     });
     const imageUrl = await this.fileStorageService.getUrl(path);
 
-    const product = new Product({
+    const product = Product.create({
       name: input.name,
       description: input.description,
       price: input.price,

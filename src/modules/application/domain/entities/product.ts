@@ -1,43 +1,53 @@
-import { BaseEntity } from '@application/domain/entities/base';
+import { CapitalizeNameService } from '@infra/utils';
+import { BaseEntity } from './base';
 
 type Input = {
   name: string;
-  description?: string;
   price: number;
   imageUrl: string;
-  ingredients?: string[];
   categoryId: string;
   clientId: string;
+  description?: string;
+  ingredients?: string[];
 };
 
 export class Product extends BaseEntity {
-  public readonly id: string;
-  public readonly name: string;
-  public readonly description?: string;
-  public readonly price: number;
-  public readonly imageUrl: string;
-  public readonly ingredients?: string[];
-  public readonly categoryId: string;
-  public readonly clientId: string;
-  public readonly createdAt: Date;
+  updatedAt?: Date;
 
-  constructor({
+  constructor(
+    readonly name: string,
+    readonly price: number,
+    readonly imageUrl: string,
+    readonly categoryId: string,
+    readonly clientId: string,
+    readonly createdAt: Date,
+    readonly description?: string,
+    readonly ingredients?: string[],
+  ) {
+    super();
+  }
+
+  static create({
     name,
-    description,
     price,
     imageUrl,
-    ingredients,
     categoryId,
     clientId,
+    description,
+    ingredients,
   }: Input) {
-    super();
-    this.name = name;
-    this.description = description;
-    this.price = price;
-    this.imageUrl = imageUrl;
-    this.ingredients = ingredients;
-    this.categoryId = categoryId;
-    this.clientId = clientId;
-    this.createdAt = new Date();
+    const capitalizeFirstLetterOfCategoryName =
+      CapitalizeNameService.handler(name);
+    const createdAt = new Date();
+    return new Product(
+      capitalizeFirstLetterOfCategoryName,
+      price,
+      imageUrl,
+      categoryId,
+      clientId,
+      createdAt,
+      description,
+      ingredients,
+    );
   }
 }

@@ -24,14 +24,10 @@ import {
   CreateCategoryUseCase,
   DeleteCategoryUseCase,
   GetAllCategoriesUseCase,
-  GetAllProductsByCategoryUseCase,
 } from '@application/usecases/category';
 import { FileDto } from '@api/DTOs/shared';
 import { CategoryApiPath, CategoryApiTag } from './constants';
-import {
-  CategoryResponseDto,
-  GetAllProductsByCategoryResponseDto,
-} from '@api/DTOs/category';
+import { CategoryVMResponse, CategoryViewModel } from '@api/view-models';
 
 @ApiBearerAuth('JWT-auth')
 @ApiTags(CategoryApiTag)
@@ -41,11 +37,10 @@ export class CategoryController {
     private readonly createCategoryUseCase: CreateCategoryUseCase,
     private readonly getAllCategoriesUseCase: GetAllCategoriesUseCase,
     private readonly deleteCategoryUseCase: DeleteCategoryUseCase,
-    private readonly getAllProductsByCategoryUseCase: GetAllProductsByCategoryUseCase,
   ) {}
 
   @ApiOperation({ summary: 'create category' })
-  @ApiCreatedResponse({ type: CategoryResponseDto })
+  @ApiCreatedResponse({ type: CategoryVMResponse })
   @ApiBody({
     schema: {
       type: 'object',
@@ -69,32 +64,23 @@ export class CategoryController {
   async create(
     @Body('name') name: string,
     @UploadedFile() file: FileDto,
-  ): Promise<CategoryResponseDto> {
+  ): Promise<CategoryVMResponse> {
     const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
-    return await this.createCategoryUseCase.execute(clientId, name, file);
+    const category = await this.createCategoryUseCase.execute(
+      clientId,
+      name,
+      file,
+    );
+    return CategoryViewModel.toHTTP(category);
   }
 
   @ApiOperation({ summary: 'get all categories' })
-  @ApiOkResponse({ type: [CategoryResponseDto] })
+  @ApiOkResponse({ type: [CategoryVMResponse] })
   @Get()
-  async getAll(): Promise<CategoryResponseDto[] | []> {
+  async getAll(): Promise<CategoryVMResponse[]> {
     const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
-    return await this.getAllCategoriesUseCase.execute(clientId);
-  }
-
-  @ApiOperation({ summary: 'get all products by category' })
-  @ApiParam({
-    name: 'id',
-    type: String,
-    required: true,
-  })
-  @ApiOkResponse({ type: GetAllProductsByCategoryResponseDto })
-  @Get(':id/products')
-  async getByCategory(
-    @Param('id') id: string,
-  ): Promise<GetAllProductsByCategoryResponseDto[]> {
-    const clientId = '04a3e89e-cd64-4823-8c3d-da1cbd3c03cd';
-    return await this.getAllProductsByCategoryUseCase.execute(clientId, id);
+    const categories = await this.getAllCategoriesUseCase.execute(clientId);
+    return CategoryViewModel.toHTTPArray(categories);
   }
 
   @ApiOperation({ summary: 'delete category' })

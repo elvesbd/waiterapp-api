@@ -1,4 +1,4 @@
-export class ProductOutput {
+export type ProductOutput = {
   id: string;
   name: string;
   description?: string;
@@ -8,4 +8,4 @@ export class ProductOutput {
   categoryId: string;
   clientId: string;
   createdAt: Date;
-}
+};

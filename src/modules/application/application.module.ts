@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 import { InfraModule } from '@infra/infra.module';
+import { FileStorageService } from '@application/domain/storage';
 import { SupaBaseFileStorageService } from '@infra/services/storage';
 import {
   CreateCategoryUseCase,
   GetAllCategoriesUseCase,
-  GetAllProductsByCategoryUseCase,
   DeleteCategoryUseCase,
 } from '@application/usecases/category';
 import {
@@ -16,6 +17,7 @@ import {
   CreateProductUseCase,
   GetAllProductsUseCase,
   DeleteProductUseCase,
+  GetAllProductsByCategoryUseCase,
 } from '@application/usecases/product';
 import {
   CategoryRepository,
@@ -23,16 +25,22 @@ import {
   ProductRepository,
 } from '@application/domain/repositories';
 import {
-  TypeORMCategoryRepository,
-  TypeORMOrderRepository,
-  TypeORMProductRepository,
-} from 'modules/infra/database/typeorm';
-import { FileStorageService } from '@application/domain/storage';
+  MongoDBCategoryRepository,
+  MongoDBOrderRepository,
+  MongoDBProductRepository,
+} from 'modules/infra/database/mongo/repositories';
+import {
+  CategoryModel,
+  CategorySchema,
+  OrderModel,
+  OrderSchema,
+  ProductModel,
+  ProductSchema,
+} from 'modules/infra/database/mongo/models';
 
 const categoryProviders = [
   CreateCategoryUseCase,
   GetAllCategoriesUseCase,
-  GetAllProductsByCategoryUseCase,
   DeleteCategoryUseCase,
 ];
 const orderProviders = [
@@ -44,25 +52,33 @@ const productProviders = [
   CreateProductUseCase,
   GetAllProductsUseCase,
   DeleteProductUseCase,
+  GetAllProductsByCategoryUseCase,
 ];
 
 @Module({
-  imports: [InfraModule],
+  imports: [
+    InfraModule,
+    MongooseModule.forFeature([
+      { name: CategoryModel.name, schema: CategorySchema },
+      { name: OrderModel.name, schema: OrderSchema },
+      { name: ProductModel.name, schema: ProductSchema },
+    ]),
+  ],
   providers: [
     ...categoryProviders,
     ...orderProviders,
     ...productProviders,
     {
       provide: CategoryRepository,
-      useClass: TypeORMCategoryRepository,
+      useClass: MongoDBCategoryRepository,
     },
     {
       provide: OrderRepository,
-      useClass: TypeORMOrderRepository,
+      useClass: MongoDBOrderRepository,
     },
     {
       provide: ProductRepository,
-      useClass: TypeORMProductRepository,
+      useClass: MongoDBProductRepository,
     },
     {
       provide: FileStorageService,

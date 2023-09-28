@@ -27,7 +27,7 @@ export class CreateCategoryUseCase {
     });
     const imageUrl = await this.fileStorageService.getUrl(path);
 
-    const category = new Category(name, imageUrl, clientId);
+    const category = Category.create({ name, imageUrl, clientId });
     await this.categoryRepository.save(category);
     return category;
   }

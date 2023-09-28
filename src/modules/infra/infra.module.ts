@@ -1,45 +1,58 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSource, DataSourceOptions } from 'typeorm';
-import { DatabaseService } from '@infra/database/services';
+import { MongooseModule, MongooseModuleFactoryOptions } from '@nestjs/mongoose';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+//import { databaseProviders } from '@infra/database/mongo/config';
 import {
-  TypeORMCategoryRepository,
-  TypeORMOrderRepository,
-  TypeORMProductRepository,
-  dataSource,
-} from '@infra/database/typeorm';
+  MongoDBCategoryRepository,
+  MongoDBOrderRepository,
+  MongoDBProductRepository,
+} from '@infra/database/mongo/repositories';
 import {
   SupaBaseFileStorageService,
   SupaBaseClientService,
 } from '@infra/services/storage';
+import {
+  CategoryModel,
+  CategorySchema,
+  OrderModel,
+  OrderSchema,
+  ProductModel,
+  ProductSchema,
+} from './database/mongo/models/';
 
 @Module({
   imports: [
-    TypeOrmModule.forRootAsync({
-      useClass: DatabaseService,
-      dataSourceFactory: async (
-        options?: DataSourceOptions,
-      ): Promise<DataSource> => {
-        if (!options) {
-          throw new Error('No DataSource options were provided!');
-        }
-        return dataSource.initialize();
-      },
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (
+        config: ConfigService,
+      ): Promise<MongooseModuleFactoryOptions> => ({
+        uri: config.get<string>('MONGO_URI'),
+        dbName: config.get<string>('MONGO_DB_NAME'),
+      }),
+      inject: [ConfigService],
     }),
+    MongooseModule.forFeature([
+      { name: CategoryModel.name, schema: CategorySchema },
+      { name: OrderModel.name, schema: OrderSchema },
+      { name: ProductModel.name, schema: ProductSchema },
+    ]),
   ],
   providers: [
-    TypeORMCategoryRepository,
-    TypeORMOrderRepository,
-    TypeORMProductRepository,
+    MongoDBCategoryRepository,
+    MongoDBOrderRepository,
+    MongoDBProductRepository,
     SupaBaseFileStorageService,
     SupaBaseClientService,
+    //...databaseProviders,
   ],
   exports: [
-    TypeORMCategoryRepository,
-    TypeORMOrderRepository,
-    TypeORMProductRepository,
+    MongoDBCategoryRepository,
+    MongoDBOrderRepository,
+    MongoDBProductRepository,
     SupaBaseFileStorageService,
     SupaBaseClientService,
+    //...databaseProviders,
   ],
 })
 export class InfraModule {}
