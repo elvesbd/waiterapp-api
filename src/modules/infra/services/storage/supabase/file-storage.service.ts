@@ -20,7 +20,8 @@ export class SupaBaseFileStorageService {
   private readonly SUPABASE_BUCKET = this.configService.get('SUPABASE_BUCKET');
 
   async upload(input: UploadInputFile): Promise<string> {
-    const { clientId, originalname, buffer, width, height } = input;
+    const { clientId, originalname, imageFolder, buffer, width, height } =
+      input;
     const supabase = await this.getSupaBaseClient();
     const optimizedFileBuffer = await OptimizeImageFileService.handler(
       buffer,
@@ -33,9 +34,13 @@ export class SupaBaseFileStorageService {
       error,
     } = await supabase.storage
       .from(this.SUPABASE_BUCKET)
-      .upload(`${clientId}/${originalname}`, optimizedFileBuffer, {
-        upsert: true,
-      });
+      .upload(
+        `${clientId}/${imageFolder}/${originalname}`,
+        optimizedFileBuffer,
+        {
+          upsert: true,
+        },
+      );
 
     if (error) {
       this.logger.error(error.message);

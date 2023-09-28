@@ -4,7 +4,8 @@ import { FileDto } from '@api/DTOs/shared';
 import { ProductRepository } from '@application/domain/repositories';
 import { FileStorageService } from '@application/domain/storage';
 import { Product } from '@application/domain/entities';
-import { ProductOutput } from '@application/usecases/types/product';
+
+const PRODUCTS_IMAGE_FOLDER = 'products';
 
 @Injectable()
 export class CreateProductUseCase {
@@ -17,26 +18,36 @@ export class CreateProductUseCase {
     clientId: string,
     input: CreateProductDto,
     file: FileDto,
-  ): Promise<ProductOutput> {
-    const path = await this.fileStorageService.upload({
-      clientId,
-      originalname: file.originalname,
-      buffer: file.buffer,
-      width: 390,
-      height: 200,
-    });
-    const imageUrl = await this.fileStorageService.getUrl(path);
+  ): Promise<Product> {
+    const { name, description, price, ingredients, categoryId } = input;
+    const imageUrl = await this.uploadProductImage(clientId, file);
 
     const product = Product.create({
-      name: input.name,
-      description: input.description,
-      price: input.price,
-      ingredients: input.ingredients,
-      categoryId: input.categoryId,
+      name,
+      description,
+      price,
+      ingredients,
+      categoryId,
       clientId,
       imageUrl,
     });
     await this.categoryRepository.save(product);
     return product;
+  }
+
+  private async uploadProductImage(
+    clientId: string,
+    file: FileDto,
+  ): Promise<string> {
+    const { originalname, buffer } = file;
+    const path = await this.fileStorageService.upload({
+      clientId,
+      originalname: originalname,
+      imageFolder: PRODUCTS_IMAGE_FOLDER,
+      buffer: buffer,
+      width: 390,
+      height: 200,
+    });
+    return await this.fileStorageService.getUrl(path);
   }
 }
